@@ -47,7 +47,7 @@
     top: 68px;
     left: 0.3%;
     width: 99.1%;
-    height: 84%;
+    height: 95%;
     margin: 0;
     padding: 0;
 }
@@ -267,4 +267,297 @@
 .btnList .disable:hover {
     opacity: 1;
     cursor: not-allowed;
+}
+/* -------------------------------------
+ * timeline
+ * ------------------------------------- */
+ .timeline{
+    max-width: 600px;
+    margin: -750px auto 0px;
+    padding: 1px 5%;
+    font-size: 100%;
+    font-family: "Noto Sans", sans-serif;
+    color: #eee9dc;
+    background: #48b379;
+    z-index: 1000;
+ }
+ #timeline {
+    list-style: none;
+    margin: 45px 0 30px 120px;
+    padding-left: 30px;
+    border-left: 8px solid #eee9dc;
+  }
+  #timeline li {
+    margin: 10px 0;
+    position: relative;
+  }
+  #timeline p {
+    margin: 0 0 10px;
+  }
+  
+  .date {
+    margin-top: -10px;
+    top: 50%;
+    left: -158px;
+    font-size: 0.95em;
+    line-height: 20px;
+    position: absolute;
+  }
+  
+  .circle {
+    margin-top: -10px;
+    top: 50%;
+    left: -44px;
+    width: 10px;
+    height: 10px;
+    background: #48b379;
+    border: 5px solid #eee9dc;
+    border-radius: 50%;
+    display: block;
+    position: absolute;
+  }
+  
+  .timeline-content {
+    max-height: 20px;
+    padding: 40px 20px 0;
+    border-color: transparent;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 0.5em;
+    position: relative;
+  }
+  .timeline-content:before, .timeline-content:after {
+    content: "";
+    width: 0;
+    height: 0;
+    border: solid transparent;
+    position: absolute;
+    pointer-events: none;
+    right: 100%;
+  }
+  .timeline-content:before {
+    border-right-color: inherit;
+    border-width: 20px;
+    top: 50%;
+    margin-top: -20px;
+  }
+  .timeline-content:after {
+    border-right-color: #48b379;
+    border-width: 17px;
+    top: 50%;
+    margin-top: -17px;
+  }
+  .timeline-content p {
+    max-height: 0;
+    color: transparent;
+    text-align: justify;
+    word-break: break-word;
+    hyphens: auto;
+    overflow: hidden;
+  }
+  
+  label {
+    font-size: 1.3em;
+    position: absolute;
+    z-index: 10;
+    cursor: pointer;
+    top: 10px;
+    transition: transform 0.2s linear;
+  }
+  
+  .radio {
+    display: none;
+  }
+  
+  .radio:checked + .relative label {
+    cursor: auto;
+    transform: translateX(42px);
+  }
+  .radio:checked + .relative .circle {
+    background: #f98262;
+  }
+  .radio:checked ~ .timeline-content {
+    max-height: 180px;
+    border-color: #eee9dc;
+    margin-right: 20px;
+    transform: translateX(20px);
+    transition: max-height 0.4s linear, border-color 0.5s linear, transform 0.2s linear;
+  }
+  .radio:checked ~ .timeline-content p {
+    max-height: 200px;
+    color: #eee9dc;
+    transition: color 0.3s linear 0.3s;
+  }
+
+#conference-timeline {
+    background: #e6e6e6;
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    position: relative;
+    max-width: 820px;
+    width: 100%;
+    margin: 0 auto;
+}
+#conference-timeline:before,
+#conference-timeline:after {
+    position: absolute;
+    left: 50%;
+    display: table;
+    font-family: "Roboto", sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+    text-transform: uppercase;
+    background: #00b0bd;
+    padding: 15px 23px;
+    color: #fff;
+    transform: translateX(-50%);
+    max-width: 5%;
+    width: 100%;
+    text-align: center;
+}
+#conference-timeline:before {
+    content: "Start";
+    top: 0;
+}
+#conference-timeline:after {
+    content: "End";
+    bottom: 0;
+}
+#conference-timeline .conference-center-line {
+    position: absolute;
+    width: 3px;
+    height: 100%;
+    top: 0;
+    left: 50%;
+    margin-left: -2px;
+    background: #00b0bd;
+    z-index: -1;
+}
+#conference-timeline .conference-timeline-content {
+    padding-top: 67px;
+    padding-bottom: 67px;
+}
+.timeline-article {
+    width: 95%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    margin: 20px 20px;
+}
+.timeline-article .content-left,
+.timeline-article .content-right {
+    position: relative;
+    width: 35%;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .03);
+    padding: 23px 25px;
+}
+.timeline-article p {
+    margin: 0 0 0 60px;
+    padding: 0;
+    font-weight: 400;
+    color: #242424;
+    font-size: 20px;
+    line-height: 24px;
+    position: relative;
+}
+.timeline-article p span.article-number {
+    position: absolute;
+    font-weight: 300;
+    font-size: 44px;
+    top: 10px;
+    left: -60px;
+    color: #00b0bd;
+}
+.timeline-article .content-left {
+    float: left;
+}
+.timeline-article .content-right {
+    float: right;
+}
+.timeline-article .content-left:before,
+.timeline-article .content-right:before {
+    position: absolute;
+    top: 20px;
+    font-size: 24px;
+    font-family: "FontAwesome";
+    color: #fff;
+}
+.timeline-article .content-left:before {
+    content: ">";
+    right: -11px;
+}
+.timeline-article .content-right:before {
+    content: "<";
+    left: -11px;
+}
+.timeline-article .meta-date {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 62px;
+    height: 62px;
+    margin-left: -31px;
+    color: #fff;
+    border-radius: 100%;
+    background: #00b0bd;
+}
+.timeline-article .meta-date .date {
+    // display: block;
+    text-align: center;
+    font-weight: 900;
+    font-size: 30px;
+    line-height: 62px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+}
+
+@media only screen and (max-width: 830px) {
+    #conference-timeline:before,
+    #conference-timeline:after {
+        left: 0px;
+        transform: none;
+    }
+    #conference-timeline .conference-center-line {
+        margin-left: 0;
+        left: 50px;
+    }
+    .timeline-article .meta-date {
+        margin-left: 0;
+        left: 20px;
+    }
+    .timeline-article .content-left,
+    .timeline-article .content-right {
+        width: auto;
+        float: none;
+        margin-left: 110px;
+        padding: 10px 25px;
+        min-height: 53px;
+    }
+    .timeline-article .content-left {
+        margin-bottom: 20px;
+    }
+    .timeline-article .content-left:before {
+        content: "\f0d9";
+        right: auto;
+        left: -8px;
+    }
+    .timeline-article .content-right:before {
+        display: none;
+    }
+}
+@media only screen and (max-width: 400px) {
+    /*===== // Resonsive Vertical Timeline =====*/
+    
+    .timeline-article p {
+        margin: 0;
+    }
+    .timeline-article p span.article-number {
+        display: none;
+    }
 }
