@@ -14,11 +14,22 @@ export class ContentComponent implements OnInit {
 
   project: Project;
   projectName: string;
-  composedCcslFlag: false;
+  
   ccslSetList: CCSLSet[];
-  CGs: string[] = [];
-  ccslFlag: boolean = false;
+  
+  
   version;
+  composedCcslSet: CCSLSet;
+  simplifiedCCSLSet: CCSLSet;
+  orchestrateCCSLSet: CCSLSet;
+  ccslFlag: boolean = false;
+  composedCcslFlag: boolean = false;
+  simplifiedCcslFlag: boolean = false;
+  orchestratedCcslFlag: boolean = false;
+  CGs: string[] = [];
+  CCG: string[] = [];
+  SCG: string[] = [];
+  OCG: string[] = [];
 
   constructor(
     private fileService: FileService,
@@ -37,9 +48,27 @@ export class ContentComponent implements OnInit {
               this.CGs.push("CG-" + (i + 1));
             }
           }
-          // console.log(this.CGs)
-          // console.log(this.ccslSetList)
-
+        }
+        if (this.project.composedCcslSet != null) {
+          this.composedCcslSet = this.project.composedCcslSet;
+          this.composedCcslFlag = true;
+          if (this.CCG.length != 1) {
+            this.CCG.push("ComposedCG");
+          }
+        }
+        if (this.project.simplifiedCcslSet != null) {
+          this.simplifiedCCSLSet = this.project.simplifiedCcslSet;
+          this.simplifiedCcslFlag = true;
+          if (this.SCG.length != 1) {
+            this.SCG.push("SimplifiedCG");
+          }
+        }
+        if (this.project.orchestrateCcslSet != null) {
+          this.orchestrateCCSLSet = this.project.orchestrateCcslSet;
+          this.orchestratedCcslFlag = true;
+          if (this.OCG.length != 1) {
+            this.OCG.push("OrchestratedCG");
+          }
         }
       })
     fileService.sendVersionEmmited$.subscribe(
@@ -132,15 +161,18 @@ export class ContentComponent implements OnInit {
   change(title: string) {
     console.log(title + "-P")
     let parTab;
-    if (!title.startsWith("Composed")) {
-      parTab = document.getElementById(title).parentElement.parentElement;
-      // console.log(parTab)
-    } else {
+    if (title.startsWith("Composed")) {
       parTab = document.getElementById("composedCCSL").parentElement;
-      // console.log(parTab)
+    } else if(title.startsWith("Simplified")){
+      parTab = document.getElementById("simplifiedCCSL").parentElement;
+    } else if(title.startsWith("Orchestrated")){
+      parTab = document.getElementById("orchestratedCCSL").parentElement;
+    } else {
+      parTab = document.getElementById(title).parentElement.parentElement;
     }
+    console.log(parTab)
     var tabs = parTab.children;
-    // console.log(tabs)
+    console.log(tabs)
     var cgTitle = title.replace("CCSL", "CG");
     console.log(cgTitle)
 
@@ -156,10 +188,18 @@ export class ContentComponent implements OnInit {
           var cgId = id.replace("CCSL", "CG")
           // console.log(cgId)
           document.getElementById(cgId + "-P").style.display = 'none';
-          // if (this.project.composedCcslSet != null) {
-          //   document.getElementById("ComposedCCSL-P").style.display = 'none';
-          //   document.getElementById("ComposedCG-P").style.display = 'none';
-          // }
+          if (this.project.composedCcslSet.id != null) {
+            document.getElementById("ComposedCCSL-P").style.display = 'none';
+            document.getElementById("ComposedCG-P").style.display = 'none';
+          }
+          if (this.project.simplifiedCcslSet.id != null) {
+            document.getElementById("SimplifiedCCSL-P").style.display = 'none';
+            document.getElementById("SimplifiedCG-P").style.display = 'none';
+          }
+          if (this.project.orchestrateCcslSet.id != null) {
+            document.getElementById("OrchestratedCCSL-P").style.display = 'none';
+            document.getElementById("OrchestratedCG-P").style.display = 'none';
+          }
         }
       }
     }
@@ -180,21 +220,32 @@ export class ContentComponent implements OnInit {
     // $(ID).attr("src", url);
     document.getElementById(ID).setAttribute("src", url);
 
-    document.getElementById("ccslText").innerHTML = "CCSL constraints:";
-    document.getElementById("cgsText").innerHTML = "Clock graph:";
+    document.getElementById("ccslText").innerHTML = "CCSL Constraints:";
+    document.getElementById("cgsText").innerHTML = "Clock Graph:";
     var ccslText = document.getElementById("ccslText").innerHTML;
     var newCcslText = null;
     if (title.startsWith("CCSL")) {
       newCcslText = ccslText.slice(0, 16) + " of scenario diagram " + title.split("CCSL-")[1] + ccslText.slice(16);
     } else if (title.startsWith("Composed")) {
       newCcslText = "Composed " + ccslText;
-    } else if (title.startsWith("Sub")) {
-      newCcslText = ccslText.slice(0, 16) + " of scenario " + title.split("CCSL-")[1] + ccslText.slice(16);
+    } else if(title.startsWith("Simplified")){
+      newCcslText = "Simplified " + ccslText;
+    } else if(title.startsWith("Orchestrated")){
+      newCcslText = "Orchestrated " + ccslText;
     }
     console.log(newCcslText)
     document.getElementById("ccslText").innerHTML = newCcslText;
     var cgsText = document.getElementById("cgsText").innerHTML;
-    var newCgsText = cgsText.slice(0, 11) + " of " + title.replace("CCSL", "CG") + cgsText.slice(11);
+    var newCgsText = null;
+    if (title.startsWith("CCSL")) {
+      newCgsText = cgsText.slice(0, 11) + " of " + title.replace("CCSL", "CG") + cgsText.slice(11);
+    } else if (title.startsWith("Composed")) {
+      newCgsText = "Composed " + cgsText;
+    } else if(title.startsWith("Simplified")){
+      newCgsText = "Simplified " + cgsText;
+    } else if(title.startsWith("Orchestrated")){
+      newCgsText = "Orchestrated " + cgsText;
+    }
     console.log(newCgsText);
     document.getElementById("cgsText").innerHTML = newCgsText;
   }

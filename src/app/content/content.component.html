@@ -1,15 +1,18 @@
 <div class="content">
     <div class="top-content">
-        <ul id="CCSL" class="dropDown" *ngIf="ccslSetList" (mouseenter)="setHeight(ccslSetList)"
-            (mouseleave)="resetHeight(ccslSetList)">CCSL
+        <ul id="CCSL" class="dropDown" *ngIf="ccslSetList && ccslSetList.length > 0"
+            (mouseenter)="setHeight(ccslSetList)" (mouseleave)="resetHeight(ccslSetList)">CCSL
             <li id="{{ccslSet.id}}" *ngFor="let ccslSet of ccslSetList" (click)="change(ccslSet.id)">{{ccslSet.id}}</li>
         </ul>
-        <ul id="composedCCSL" class="dropDown">Composed
+        <ul id="composedCCSL" class="dropDown" *ngIf="composedCcslSet && composedCcslSet.id != null"
+            (click)="change(composedCcslSet.id)">Composed
             CCSL
         </ul>
-        <ul id="simplifiedCCSL" class="dropDown">SimplifiedCCSL
+        <ul id="simplifiedCCSL" class="dropDown" *ngIf="simplifiedCCSLSet && simplifiedCCSLSet.id != null"
+            (click)="change(simplifiedCCSLSet.id)">SimplifiedCCSL
         </ul>
-        <ul id="orchestratedCCSL" class="dropDown">OrchestrateCCSL
+        <ul id="orchestratedCCSL" class="dropDown" *ngIf="orchestrateCCSLSet && orchestrateCCSLSet.id != null"
+            (click)="change(orchestrateCCSLSet.id)">OrchestratedCCSL
         </ul>
     </div>
     <div class="middle-content">
@@ -17,21 +20,27 @@
             <!-- CCSL constraints of sequence diagram 1 ... -->
             <!-- Composed CCSL constraints -->
             <!-- CCSL constraints of scenario 1 -->
-            <h3 id="ccslText">CCSL constraints:</h3>
+            <h3 id="ccslText">CCSL Constraints:</h3>
             <div id="{{ccslset.id}}-P" *ngFor="let ccslset of ccslSetList" style="display: none;">
                 <p *ngFor="let ccsl of ccslset.ccslList">{{ccsl}}</p>
             </div>
-            <!-- <div id="{{composedCcslSet.id}}-P" *ngIf="composedCcslSet" style="display: none;">
+            <div id="{{composedCcslSet.id}}-P" *ngIf="composedCcslSet && composedCcslSet.id != null"
+                style="display: none;">
                 <p *ngFor="let ccsl of composedCcslSet.ccslList">{{ccsl}}</p>
             </div>
-            <div id="{{ccslset.id}}-P" *ngFor="let ccslset of subCcslSetList" style="display: none;">
-                <p *ngFor="let ccsl of ccslset.ccslList">{{ccsl}}</p>
-            </div> -->
+            <div id="{{simplifiedCCSLSet.id}}-P" *ngIf="simplifiedCCSLSet && simplifiedCCSLSet.id != null"
+                style="display: none;">
+                <p *ngFor="let ccsl of simplifiedCCSLSet.ccslList">{{ccsl}}</p>
+            </div>
+            <div id="{{orchestrateCCSLSet.id}}-P" *ngIf="orchestrateCCSLSet && orchestrateCCSLSet.id != null"
+                style="display: none;">
+                <p *ngFor="let ccsl of orchestrateCCSLSet.ccslList">{{ccsl}}</p>
+            </div>
         </div>
         <!-- <button id="toGraphBtn">
             Transform to clock graph</button> -->
         <div class="cgs-content">
-            <h3 id="cgsText">Clock graph:</h3>
+            <h3 id="cgsText">Clock Graph:</h3>
             <!-- <ul id="CG" *ngIf="CGs">
                 <li id="{{CG}}" *ngFor="let CG of CGs" (click)="changePng(CG)">{{CG}}</li>
             </ul> -->
@@ -39,12 +48,15 @@
             <div style="display: none;" *ngFor="let CG of CGs" id="{{CG}}-P">
                 <img id="{{CG}}-Pag" (mousewheel)="resizeimg(CG,$event)">
             </div>
-            <!-- <div style="display: none;" *ngFor="let CG of CCG" id="{{CG}}-P">
-                <img id="{{CG}}-Pag" (mousewheel)="resizeimg(CG,$event)">
+            <div style="display: none;" *ngIf="CCG" id="ComposedCG-P">
+                <img id="ComposedCG-Pag" (mousewheel)="resizeimg(CCG,$event)">
             </div>
-            <div style="display: none;" *ngFor="let CG of SCGs" id="{{CG}}-P">
-                <img id="{{CG}}-Pag" (mousewheel)="resizeimg(CG,$event)">
-            </div> -->
+            <div style="display: none;" *ngIf="SCG" id="SimplifiedCG-P">
+                <img id="SimplifiedCG-Pag" (mousewheel)="resizeimg(SCG,$event)">
+            </div>
+            <div style="display: none;" *ngIf="OCG" id="OrchestratedCG-P">
+                <img id="OrchestratedCG-Pag" (mousewheel)="resizeimg(OCG,$event)">
+            </div>
         </div>
     </div>
     <div class="btnList">

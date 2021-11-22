@@ -49,6 +49,11 @@ export class ProjectService {
       project => {
         console.log(project);
         this.sendProject(project);
+        if(project){
+          alert("Open successfully!");
+        } else{
+          alert("Open failed!");
+        }
       })
   }
 
