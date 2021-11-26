@@ -278,4 +278,13 @@ export class ContentComponent implements OnInit {
     if (zoom > 0) img.style.zoom = zoom + '%';
     return false;
   }
+
+  visualize(){
+    let timeline = document.getElementById("conference-timeline");
+    timeline.style.display = "block";
+    let lineHeight = timeline.scrollHeight;
+    console.log(lineHeight);
+    document.getElementById("conference-center-line").style.height = lineHeight - 20 + "px";
+    
+  }
 }
