@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
 import { CCSLSet } from '../entity/CCSLSet';
 import { Project } from '../entity/Project';
+import { TimeEvent } from '../entity/TimeEvent';
+import { VisualizedScenario } from '../entity/VisualizedScenario';
 import { FileService } from '../service/file.service';
 import { ProjectService } from '../service/project.service';
 
@@ -17,7 +19,6 @@ export class ContentComponent implements OnInit {
   
   ccslSetList: CCSLSet[];
   
-  
   version;
   composedCcslSet: CCSLSet;
   simplifiedCCSLSet: CCSLSet;
@@ -30,6 +31,7 @@ export class ContentComponent implements OnInit {
   CCG: string[] = [];
   SCG: string[] = [];
   OCG: string[] = [];
+  visualizedScenario: VisualizedScenario;
 
   constructor(
     private fileService: FileService,
@@ -282,9 +284,78 @@ export class ContentComponent implements OnInit {
   visualize(){
     let timeline = document.getElementById("conference-timeline");
     timeline.style.display = "block";
-    let lineHeight = timeline.scrollHeight;
-    console.log(lineHeight);
-    document.getElementById("conference-center-line").style.height = lineHeight - 20 + "px";
     
+    this.visualizedScenario = {
+      conflictTime: 6,
+      timeEvents: [
+        {
+          time: 1,
+          events: ["", "OnTime"]
+        },
+        {
+          time: 2,
+          events: ["", "OnPulse2"]
+        },
+        {
+          time: 3,
+          events: ["", "On2.s"]
+        },
+        {
+          time: 4,
+          events: ["", "On2.f"]
+        },
+        {
+          time: 5,
+          events: ["OnButton", "OffTime"]
+        },
+        {
+          time: 6,
+          events: ["OnPulse1", "OffPulse2"]
+        },
+        {
+          time: 7,
+          events: ["On1.s", "Off2.s"]
+        },
+        {
+          time: 8,
+          events: ["On1.f", "Off2.f"]
+        },
+        {
+          time: 9,
+          events: ["OffButton", ""]
+        },
+        {
+          time: 10,
+          events: ["OffPulse1", ""]
+        },
+        {
+          time: 11,
+          events: ["Off1.s", ""]
+        },
+        {
+          time: 12,
+          events: ["Off1.f", ""]
+        }
+      ]
+    };
+    // console.log(this.visualizedScenario)
+    let height = 67 * 2 + (72 + 20) * this.visualizedScenario.timeEvents.length + "px";
+    document.getElementById("conference-center-line").style.height = height;
+    setTimeout(() => {
+      let articles = document.getElementsByClassName("timeline-article");
+      // console.log(articles)
+      let article = articles[this.visualizedScenario.conflictTime - 1];
+      let left = article.childNodes[0].childNodes[0] as HTMLElement;
+      let right = article.childNodes[2].childNodes[0] as HTMLElement;
+      left.style.color = "#00b0bd";
+      left.style.fontWeight = "700";
+      right.style.color = "#00b0bd";
+      right.style.fontWeight = "700";
+    }, 0);
+    
+  }
+
+  closeTimeline(){
+    document.getElementById("conference-timeline").style.display = "none";
   }
 }

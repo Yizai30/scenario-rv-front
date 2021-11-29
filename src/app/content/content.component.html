@@ -60,57 +60,41 @@
         </div>
         <section id="conference-timeline" style="display: none;">
             <div id="conference-center-line"></div>
-            <div class="conference-timeline-content">
+            <div class="conference-timeline-content" *ngIf="visualizedScenario && visualizedScenario.timeEvents.length > 0">
                 <div class="timeline-start">Start</div>
+                <div class="timeline-close" (click)="closeTimeline()">X</div>
                 <div class="timeline-scenario left">Scenario 1</div>
                 <div class="timeline-scenario right">Scenario 2</div>
                 <!-- Article -->
-                <div class="timeline-article">
-                    <div class="content-left">
-                        <p>OnTime
+                <div class="timeline-article" *ngFor="let timeEvent of visualizedScenario.timeEvents">
+                    <div class="content-left" *ngIf="timeEvent.events[0] != ''">
+                        <p>{{timeEvent.events[0]}}
                         </p>
                     </div>
-                    <!-- <div class="content-right">
-                        <p>OnPulse1
+                    <div class="content-right" *ngIf="timeEvent.events[1] != ''">
+                        <p>{{timeEvent.events[1]}}
                         </p>
-                    </div> -->
+                    </div>
                     <div class="meta-date">
-                        <span class="date">1</span>
-                        <!-- <span class="month">APR</span> -->
+                        <span class="date">{{timeEvent.time}}</span>
                     </div>
                 </div>
-                <!-- // Article -->
-    
-                <!-- Article -->
-                <div class="timeline-article">
+                <!-- <div class="timeline-article">
                     <div class="content-left">
                         <p>OnPulse2
                         </p>
                     </div>
-                    <!-- <div class="content-right">
-                        <p>On1.f 
-                        </p>
-                    </div> -->
                     <div class="meta-date">
                         <span class="date">2</span>
-                        <!-- <span class="month">APR</span> -->
                     </div>
                 </div>
-                <!-- // Article -->
-    
-                <!-- Article -->
                 <div class="timeline-article">
                     <div class="content-left">
                         <p>On2.s
                         </p>
                     </div>
-                    <!-- <div class="content-right">
-                        <p>OffPulse1
-                        </p>
-                    </div> -->
                     <div class="meta-date">
                         <span class="date">3</span>
-                        <!-- <span class="month">APR</span> -->
                     </div>
                 </div>
                 <div class="timeline-article">
@@ -118,10 +102,6 @@
                         <p>On2.f
                         </p>
                     </div>
-                    <!-- <div class="content-right">
-                        <p>OffPulse1
-                        </p>
-                    </div> -->
                     <div class="meta-date">
                         <span class="date">4</span>
                     </div>
@@ -179,10 +159,6 @@
                     </div>
                 </div>
                 <div class="timeline-article">
-                    <!-- <div class="content-left">
-                        <p>OffTime
-                        </p>
-                    </div> -->
                     <div class="content-right">
                         <p>OffButton
                         </p>
@@ -192,10 +168,6 @@
                     </div>
                 </div>
                 <div class="timeline-article">
-                    <!-- <div class="content-left">
-                        <p>OffPulse2
-                        </p>
-                    </div> -->
                     <div class="content-right">
                         <p>OffPulse1
                         </p>
@@ -205,10 +177,6 @@
                     </div>
                 </div>
                 <div class="timeline-article">
-                    <!-- <div class="content-left">
-                        <p>Off2.s
-                        </p>
-                    </div> -->
                     <div class="content-right">
                         <p>Off1.s
                         </p>
@@ -218,10 +186,6 @@
                     </div>
                 </div>
                 <div class="timeline-article">
-                    <!-- <div class="content-left">
-                        <p>Off2.f
-                        </p>
-                    </div> -->
                     <div class="content-right">
                         <p>Off1.f
                         </p>
@@ -229,7 +193,7 @@
                     <div class="meta-date">
                         <span class="date">12</span>
                     </div>
-                </div>
+                </div> -->
                 <div class="timeline-end">End</div>
             </div>
         </section>
@@ -268,113 +232,5 @@
             </p>
         </div> -->
     </div>
-    <!-- <div class="timeline">
-        <ul id='timeline'>
-            <li class='work'>
-                <input class='radio' id='work5' name='works' type='radio' checked>
-                <div class="relative">
-                    <label for='work5'>OnButton</label>
-                    <span class='date'>1</span>
-                    <span class='circle'></span>
-                </div>
-                <div class='timeline-content'>
-                    <p>
-                        OnButton
-                    </p>
-                </div>
-            </li>
-            <li class='work'>
-                <input class='radio' id='work4' name='works' type='radio'>
-                <div class="relative">
-                    <label for='work4'>OnPulse1</label>
-                    <span class='date'>2</span>
-                    <span class='circle'></span>
-                </div>
-                <div class='timeline-content'>
-                    <p>
-                        OnPulse1
-                    </p>
-                </div>
-            </li>
-            <li class='work'>
-                <input class='radio' id='work3' name='works' type='radio'>
-                <div class="relative">
-                    <label for='work3'>On1.s</label>
-                    <span class='date'>3</span>
-                    <span class='circle'></span>
-                </div>
-                <div class='timeline-content'>
-                    <p>
-                        On1.s
-                    </p>
-                </div>
-            </li>
-            <li class='work'>
-                <input class='radio' id='work2' name='works' type='radio'>
-                <div class="relative">
-                    <label for='work2'>On1.f</label>
-                    <span class='date'>4</span>
-                    <span class='circle'></span>
-                </div>
-                <div class='timeline-content'>
-                    <p>
-                        On1.f
-                    </p>
-                </div>
-            </li>
-            <li class='work'>
-                <input class='radio' id='work1' name='works' type='radio'>
-                <div class="relative">
-                    <label for='work1'>OffButton</label>
-                    <span class='date'>5</span>
-                    <span class='circle'></span>
-                </div>
-                <div class='timeline-content'>
-                    <p>
-                        OffButton
-                    </p>
-                </div>
-            </li>
-            <li class='work'>
-                <input class='radio' id='work6' name='works' type='radio'>
-                <div class="relative">
-                    <label for='work6'>OffPulse1</label>
-                    <span class='date'>6</span>
-                    <span class='circle'></span>
-                </div>
-                <div class='timeline-content'>
-                    <p>
-                        OffPulse1
-                    </p>
-                </div>
-            </li>
-            <li class='work'>
-                <input class='radio' id='work7' name='works' type='radio'>
-                <div class="relative">
-                    <label for='work7'>Off1.s</label>
-                    <span class='date'>7</span>
-                    <span class='circle'></span>
-                </div>
-                <div class='timeline-content'>
-                    <p>
-                        Off1.s
-                    </p>
-                </div>
-            </li>
-            <li class='work'>
-                <input class='radio' id='work8' name='works' type='radio'>
-                <div class="relative">
-                    <label for='work8'>On1.f</label>
-                    <span class='date'>8</span>
-                    <span class='circle'></span>
-                </div>
-                <div class='timeline-content'>
-                    <p>
-                        Off1.f
-                    </p>
-                </div>
-            </li>
-        </ul>
-    </div> -->
     
 </div>

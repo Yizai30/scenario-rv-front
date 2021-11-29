@@ -429,6 +429,20 @@
 .conference-timeline-content .right{
     left: 76%;
 }
+.timeline-close{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    background-color: #e3e3e3;
+    cursor: pointer;
+}
+.timeline-close:hover{
+    background-color: #a1a1a1;
+}
 .timeline-start,
 .timeline-end {
     position: absolute;
