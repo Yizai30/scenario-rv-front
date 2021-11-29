@@ -284,7 +284,10 @@ export class ContentComponent implements OnInit {
   visualize(){
     let timeline = document.getElementById("conference-timeline");
     timeline.style.display = "block";
-    
+    this.projectService.visualizeScenario(this.project).subscribe(
+      visualizedScenario => {
+        console.log(visualizedScenario);
+      })
     this.visualizedScenario = {
       conflictTime: 6,
       timeEvents: [

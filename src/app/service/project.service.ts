@@ -6,6 +6,7 @@ import { CCSLSet } from '../entity/CCSLSet';
 import { Project } from '../entity/Project';
 import * as jQuery from 'jquery';
 import { FileService } from './file.service';
+import { VisualizedScenario } from '../entity/VisualizedScenario';
 
 @Injectable({
   providedIn: 'root'
@@ -83,6 +84,13 @@ export class ProjectService {
     const url = `http://localhost:8071/project/CCSLOrchestrate?username=${username}`;
     var ccsl = this.http.post<CCSLSet>(url, project, this.httpOptions);
     return ccsl;
+  }
+
+  visualizeScenario(project: Project): Observable<VisualizedScenario> {
+    let username = this.getUserName()
+    const url = `http://localhost:8071/project/visualizeScenario?username=${username}`;
+    var visualizedScenario = this.http.post<VisualizedScenario>(url, project, this.httpOptions);
+    return visualizedScenario;
   }
 
   getUserName() {
