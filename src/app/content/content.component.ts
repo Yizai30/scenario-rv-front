@@ -50,6 +50,10 @@ export class ContentComponent implements OnInit {
               this.CGs.push("CG-" + (i + 1));
             }
           }
+          // document.getElementById("CCSL").style.display = "block";
+          setTimeout(() => {
+            this.change(this.ccslSetList[0].id);
+          }, 0);
         }
         if (this.project.composedCcslSet != null) {
           this.composedCcslSet = this.project.composedCcslSet;
@@ -99,6 +103,7 @@ export class ContentComponent implements OnInit {
     } else if (this.project.scenarioGraphList.length <= 0) {
       alert("Please upload the scenario diagrams first!")
     } else {
+      
       this.projectService.sdToCCSL(this.project).subscribe(
         ccsls => {
           console.log(ccsls);
@@ -121,6 +126,9 @@ export class ContentComponent implements OnInit {
           console.log(ccslConstraints);
           this.project.composedCcslSet = ccslConstraints;
           this.projectService.sendProject(this.project);
+          setTimeout(() => {
+            this.change(this.composedCcslSet.id);
+          }, 0);
         })
     }
 
@@ -139,6 +147,9 @@ export class ContentComponent implements OnInit {
           console.log(ccslSet);
           this.project.simplifiedCcslSet = ccslSet;
           this.projectService.sendProject(this.project);
+          setTimeout(() => {
+            this.change(this.simplifiedCCSLSet.id);
+          }, 0);
         })
     }
   }
@@ -156,6 +167,9 @@ export class ContentComponent implements OnInit {
           console.log(ccslSet);
           this.project.orchestrateCcslSet = ccslSet;
           this.projectService.sendProject(this.project);
+          setTimeout(() => {
+            this.change(this.orchestrateCCSLSet.id);
+          }, 0);
         })
     }
   }
@@ -190,15 +204,15 @@ export class ContentComponent implements OnInit {
           var cgId = id.replace("CCSL", "CG")
           // console.log(cgId)
           document.getElementById(cgId + "-P").style.display = 'none';
-          if (this.project.composedCcslSet.id != null) {
+          if (this.project.composedCcslSet != null && this.project.composedCcslSet.id != null) {
             document.getElementById("ComposedCCSL-P").style.display = 'none';
             document.getElementById("ComposedCG-P").style.display = 'none';
           }
-          if (this.project.simplifiedCcslSet.id != null) {
+          if (this.project.simplifiedCcslSet != null && this.project.simplifiedCcslSet.id != null) {
             document.getElementById("SimplifiedCCSL-P").style.display = 'none';
             document.getElementById("SimplifiedCG-P").style.display = 'none';
           }
-          if (this.project.orchestrateCcslSet.id != null) {
+          if (this.project.orchestrateCcslSet != null && this.project.orchestrateCcslSet.id != null) {
             document.getElementById("OrchestratedCCSL-P").style.display = 'none';
             document.getElementById("OrchestratedCG-P").style.display = 'none';
           }
