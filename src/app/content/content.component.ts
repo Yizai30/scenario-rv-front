@@ -227,7 +227,7 @@ export class ContentComponent implements OnInit {
     var time = (new Date()).getTime();
     var userName = this.projectService.getUserName();
 
-    var url = `http://localhost:8071/project/display?userName=${userName}&projectName=${this.projectName}&version=${this.version}&fileName=${cgTitle}&time=${time}`;
+    var url = `http://47.52.116.116:8071/project/display?userName=${userName}&projectName=${this.projectName}&version=${this.version}&fileName=${cgTitle}&time=${time}`;
     console.log(url);
     var ID = cgTitle + "-Pag"
     console.log(ID);
@@ -372,7 +372,37 @@ export class ContentComponent implements OnInit {
     
   }
 
-  closeTimeline(){
-    document.getElementById("conference-timeline").style.display = "none";
+  downloadproject(filename){
+    var url = 'http://47.52.116.116:8088/file/downloadProject/' + filename ;
+    console.log(url)
+    this.download(url)
+  }
+
+  download(url){   
+    var form = document.createElement('form');
+    document.body.appendChild(form);
+    form.style.display = "none";
+    form.action = url;
+    form.id = 'excel';
+    form.method = 'post';
+    var newElement = document.createElement("input");
+    newElement.setAttribute("type", "hidden");
+    form.appendChild(newElement);
+    form.submit();
+  }
+
+  play(fileName){
+    document.getElementById("play").style.display = "block";
+    setTimeout(function () {
+      let vid = document.getElementById('video1')
+      if (vid != undefined) {
+        vid.setAttribute("src", "http://47.52.116.116:8088/file/Demo?fileName=" + fileName)
+      }
+      console.log(vid)
+    }, 500)
+  }
+
+  close(id){
+    document.getElementById(id).style.display = "none";
   }
 }

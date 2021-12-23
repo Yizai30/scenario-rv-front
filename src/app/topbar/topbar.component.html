@@ -15,9 +15,10 @@
                   </ul>
             </li>
             <li (click)="saveProject()">Save</li>
-            <li><a href="http://re4cps.org/help">Help</a></li>
-            <li><a href="http://re4cps.org/login">Login</a></li>
-            <li (click)="sdToCCSL()">Transform</li>
+            <li (click)="help()">Help</li>
+            <!-- 目前还无法正常跳转到登陆页面 -->
+            <li><a href="http://47.52.116.116/#/login">Login</a></li>
+            <!-- <li (click)="sdToCCSL()">Transform</li> -->
         </ul>
     </nav>
     <h3 class="user">{{userName}}</h3>

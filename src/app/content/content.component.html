@@ -1,4 +1,4 @@
-<div class="content">
+<div class="content" id="content">
     <div class="top-content">
         <ul id="CCSL" class="dropDown" *ngIf="ccslSetList && ccslSetList.length > 0"
             (mouseenter)="setHeight(ccslSetList)" (mouseleave)="resetHeight(ccslSetList)">CCSL
@@ -62,7 +62,7 @@
             <div id="conference-center-line"></div>
             <div class="conference-timeline-content" *ngIf="visualizedScenario && visualizedScenario.timeEvents.length > 0">
                 <div class="timeline-start">Start</div>
-                <div class="timeline-close" (click)="closeTimeline()">X</div>
+                <div class="close" id="timeline-close" (click)="close('conference-timeline')">X</div>
                 <div class="timeline-scenario left">Scenario 1</div>
                 <div class="timeline-scenario right">Scenario 2</div>
                 <!-- Article -->
@@ -105,5 +105,28 @@
         <h3>Result:</h3>
         <p>inconsistent</p>
     </div> -->
-    
+</div>
+
+<div id="help" style="display: none;">
+    <h1>Examples</h1>
+    <div>
+      <h2>LightController</h2>
+      <p>
+        <a (click)="downloadproject('Env/LightController')">download project</a>
+        <br>
+        <a (click)="play('LightController_Env')">play demo</a>
+      </p>
+
+      <h2>TrafficController</h2>
+      <p>
+        <a (click)="downloadproject('Env/TrafficController')">download project</a>
+        <br>
+        <a (click)="play('TrafficController_Env')">play demo</a>
+      </p>
+    </div>
+</div>
+
+<div id="play" style="display: none;">
+    <div class="close" id="play-close" (click)="close('play')">X</div>
+    <video width="1120" height="540" controls="controls" id="video1" preload="auto" src="?"></video>
 </div>

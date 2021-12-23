@@ -35,7 +35,10 @@ export class TopbarComponent implements OnInit {
     private projectService: ProjectService,
   ) {
     if (document.cookie != '') {
-      this.userName = jQuery.parseJSON(document.cookie)['username']
+      // document.cookie的读取存在问题
+      // this.userName = jQuery.parseJSON(document.cookie)['username']
+      console.log("topbar username:" + document.cookie['username'])
+      this.userName = document.cookie['username'];
     } else {
       this.userName = "Not Login"
     }
@@ -51,10 +54,14 @@ export class TopbarComponent implements OnInit {
   }
 
   newFile(): void {
+    document.getElementById("help").style.display = "none";
+    document.getElementById("content").style.display = "block";
     this.fileService.newProject(true);
   }
 
   uploadFile() {
+    document.getElementById("help").style.display = "none";
+    document.getElementById("content").style.display = "block";
     this.uploader.clearQueue();
     //若未创建项目，或当前项目为空项目，提示不能上传用户，否则允许用户上传
     if (this.projectName == null) {
@@ -118,6 +125,8 @@ export class TopbarComponent implements OnInit {
 
   uploadOntology() {
     //若未创建项目，或当前项目为空项目，提示不能上传用户，否则允许用户上传
+    document.getElementById("help").style.display = "none";
+    document.getElementById("content").style.display = "block";
     this.uploader.clearQueue();
     if (this.projectName == null) {
       alert('Please create a new project before uploading the owl file!');
@@ -175,6 +184,8 @@ export class TopbarComponent implements OnInit {
   }
 
   saveProject() {
+    document.getElementById("help").style.display = "none";
+    document.getElementById("content").style.display = "block";
     var result: boolean;
     console.log(this.project)
     if (this.project.title == null) {
@@ -195,6 +206,8 @@ export class TopbarComponent implements OnInit {
   }
 
   openProject() {
+    document.getElementById("help").style.display = "none";
+    document.getElementById("content").style.display = "block";
     this.fileService.searchProject().subscribe(
       projects => {
         this.projects = projects
@@ -212,5 +225,12 @@ export class TopbarComponent implements OnInit {
         console.log(ccsls);
         // this.project.ccslSetList = ccsls;
       })
+  }
+
+  help(){
+    console.log("help")
+    console.log(document.getElementById("content"))
+    document.getElementById("content").style.display = "none";
+    document.getElementById("help").style.display = "block";
   }
 }

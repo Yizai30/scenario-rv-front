@@ -60,43 +60,47 @@ export class ProjectService {
 
   sdToCCSL(project: Project): Observable<CCSLSet[]> {
     let username = this.getUserName()
-    const url = `http://localhost:8071/project/sdToCCSL?username=${username}`;
+    const url = `http://47.52.116.116:8071/project/sdToCCSL?username=${username}`;
     var ccsls = this.http.post<CCSLSet[]>(url, project, this.httpOptions);
     return ccsls;
   }
 
   CCSLComposition(project: Project): Observable<CCSLSet> {
     let username = this.getUserName()
-    const url = `http://localhost:8071/project/CCSLComposition?username=${username}`;
+    const url = `http://47.52.116.116:8071/project/CCSLComposition?username=${username}`;
     var ccsl = this.http.post<CCSLSet>(url, project, this.httpOptions);
     return ccsl;
   }
 
   CCSLSimplify(project: Project): Observable<CCSLSet> {
     let username = this.getUserName()
-    const url = `http://localhost:8071/project/CCSLSimplify?username=${username}`;
+    const url = `http://47.52.116.116:8071/project/CCSLSimplify?username=${username}`;
     var ccsl = this.http.post<CCSLSet>(url, project, this.httpOptions);
     return ccsl;
   }
 
   CCSLOrchestrate(project: Project): Observable<CCSLSet> {
     let username = this.getUserName()
-    const url = `http://localhost:8071/project/CCSLOrchestrate?username=${username}`;
+    const url = `http://47.52.116.116:8071/project/CCSLOrchestrate?username=${username}`;
     var ccsl = this.http.post<CCSLSet>(url, project, this.httpOptions);
     return ccsl;
   }
 
   visualizeScenario(project: Project): Observable<VisualizedScenario> {
     let username = this.getUserName()
-    const url = `http://localhost:8071/project/visualizeScenario?username=${username}`;
+    const url = `http://47.52.116.116:8071/project/visualizeScenario?username=${username}`;
     var visualizedScenario = this.http.post<VisualizedScenario>(url, project, this.httpOptions);
     return visualizedScenario;
   }
 
   getUserName() {
     let username = ""
+    // document.cookie的读取存在问题
     if (document.cookie != null && document.cookie != "") {
-      username = jQuery.parseJSON(document.cookie)['username'];
+      // username = JSON.parse(document.cookie)['username'];
+      console.log("project username:" + document.cookie['username'])
+      username = document.cookie['username'];
+      
     }
     return username ? username : "test"
   }
