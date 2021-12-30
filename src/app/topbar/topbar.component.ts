@@ -35,10 +35,15 @@ export class TopbarComponent implements OnInit {
     private projectService: ProjectService,
   ) {
     if (document.cookie != '') {
-      // document.cookie的读取存在问题
       // this.userName = jQuery.parseJSON(document.cookie)['username']
-      console.log("topbar username:" + document.cookie['username'])
-      this.userName = document.cookie['username'];
+      if(document.cookie.indexOf("{") != -1 && document.cookie.indexOf("}") != -1){
+        let start = document.cookie.indexOf("{");
+        let end = document.cookie.indexOf("}");
+        let cookie = document.cookie.slice(start, end + 1);
+        // console.log(cookie);
+        this.userName = jQuery.parseJSON(cookie)['username'];
+        // console.log(this.userName)
+      }
     } else {
       this.userName = "Not Login"
     }

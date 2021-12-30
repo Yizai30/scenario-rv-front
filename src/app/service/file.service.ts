@@ -101,11 +101,16 @@ export class FileService {
   
   getUserName() {
     let username = ""
-    // document.cookie的读取存在问题
     if (document.cookie != null && document.cookie != "") {
       // username = jQuery.parseJSON(document.cookie)['username'];
-      console.log("file username:" + document.cookie['username'])
-      username = document.cookie['username'];
+      if(document.cookie.indexOf("{") != -1 && document.cookie.indexOf("}") != -1){
+        let start = document.cookie.indexOf("{");
+        let end = document.cookie.indexOf("}");
+        let cookie = document.cookie.slice(start, end + 1);
+        // console.log(cookie);
+        username = jQuery.parseJSON(cookie)['username'];
+        // console.log(username)
+      }
     }
     return username ? username : "test"
   }
