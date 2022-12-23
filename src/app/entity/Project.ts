@@ -14,6 +14,11 @@ export class Project {
     composedCcslSet: CCSLSet;
     simplifiedCcslSet: CCSLSet;
     orchestrateCcslSet: CCSLSet;
+    inconsistentLocateCcslSet: CCSLSet;
+    causalityCcslSet: CCSLSet;
+    circularDependencyCcslSet: CCSLSet;
+    circularInconsistentLocateCcslSet: CCSLSet;
+    smtInconsistentLocateCcslSet: CCSLSet;
 
     init(title) {
         this.title = title;

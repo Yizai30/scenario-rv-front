@@ -1,0 +1,96 @@
+<div class="content" id="content-circulate">
+  <div class="top-content">
+    <ul id="composedCCSL-circulate" class="dropDown" *ngIf="composedCcslSet && composedCcslSet.id != null"
+        (click)="change(composedCcslSet.id)">合并后的 CCSL
+    </ul>
+    <ul id="clockGraph-circulate" class="dropDown" *ngIf="composedCcslSet && composedCcslSet.id != null"
+        (click)="change('ComposedCG')">时钟图
+    </ul>
+    <ul id="causalityClockGraph-circulate" class="dropDown" *ngIf="causalityCCSLSet && causalityCCSLSet.id != null"
+        (click)="change('CausalityCG')">因果时钟图
+    </ul>
+    <ul id="circularDependency-circulate" class="dropDown" *ngIf="circularDependencyCCSLSet && circularDependencyCCSLSet.id != null"
+        (click)="change(circularDependencyCCSLSet.id)">循环依赖
+    </ul>
+    <ul id="inconsistentLocate-circulate" class="dropDown" *ngIf="circularInconsistentLocateCCSLSet && circularInconsistentLocateCCSLSet.id != null"
+        (click)="change(circularInconsistentLocateCCSLSet.id)">不一致性定位结果
+    </ul>
+  </div>
+  <div class="middle-content">
+    <div class="content-left" id="content-left-circulate">
+      <h3 id="text-circulate">合并后的 CCSL 约束:</h3>
+      <div id="{{composedCcslSet.id}}-P-circulate" *ngIf="composedCcslSet && composedCcslSet.id != null"
+           style="display: none;">
+        <p *ngFor="let ccsl of composedCcslSet.ccslList">{{ccsl}}</p>
+      </div>
+      <div style="display: none;" *ngIf="CCG" id="ComposedCG-P-circulate">
+        <img id="ComposedCG-Pag-circulate" (mousewheel)="resizeimg(CCG,$event)">
+      </div>
+      <div style="display: none;" *ngIf="CACG" id="CausalityCG-P-circulate">
+        <img id="CausalityCG-Pag-circulate" (mousewheel)="resizeimg(CACG,$event)">
+      </div>
+      <div id="{{circularDependencyCCSLSet.id}}-P-circulate" *ngIf="circularDependencyCCSLSet && circularDependencyCCSLSet.id != null"
+           style="display: none;">
+        <p *ngFor="let ccsl of circularDependencyCCSLSet.ccslList">{{ccsl}}</p>
+      </div>
+      <div id="{{circularInconsistentLocateCCSLSet.id}}-P-circulate" *ngIf="circularDependencyCCSLSet && circularDependencyCCSLSet.id != null"
+           style="display: none;">
+        <p *ngFor="let ccsl of circularInconsistentLocateCCSLSet.ccslList">{{ccsl}}</p>
+      </div>
+    </div>
+    <div class="content-right" id="content-right-circulate">
+      <h3 id="cgsText-circulate">编译结果:</h3>
+      <div>
+        这里显示编译结果
+      </div>
+    </div>
+    <section id="conference-timeline" style="display: none;">
+      <div id="conference-center-line"></div>
+      <div class="conference-timeline-content" *ngIf="visualizedScenario && visualizedScenario.timeEvents.length > 0">
+        <div class="timeline-start">Start</div>
+        <div class="close" id="timeline-close" (click)="close('conference-timeline')">X</div>
+        <div class="timeline-scenario left">Scenario 1</div>
+        <div class="timeline-scenario right">Scenario 2</div>
+        <!-- Article -->
+        <div class="timeline-article" *ngFor="let timeEvent of visualizedScenario.timeEvents">
+          <div class="content-left" *ngIf="timeEvent.events[0] != ''">
+            <p>{{timeEvent.events[0]}}
+            </p>
+          </div>
+          <div class="content-right" *ngIf="timeEvent.events[1] != ''">
+            <p>{{timeEvent.events[1]}}
+            </p>
+          </div>
+          <div class="meta-date">
+            <span class="date">{{timeEvent.time}}</span>
+          </div>
+        </div>
+        <div class="timeline-end">End</div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div id="help-circulate" style="display: none;">
+  <h1>案例</h1>
+  <div>
+    <h2>LightController</h2>
+    <p>
+      <a (click)="downloadproject('Env/LightController')">下载案例</a>
+      <br>
+      <a (click)="play('LightController_Env')">演示视频</a>
+    </p>
+
+    <h2>TrafficController</h2>
+    <p>
+      <a (click)="downloadproject('Env/TrafficController')">下载案例</a>
+      <br>
+      <a (click)="play('TrafficController_Env')">演示视频</a>
+    </p>
+  </div>
+</div>
+
+<div id="play-circulate" style="display: none;">
+  <div class="close" id="play-close" (click)="close('play')">X</div>
+  <video width="1120" height="540" controls="controls" id="video1-circulate" preload="auto" src="?"></video>
+</div>

@@ -40,23 +40,26 @@ ul li:hover{
 	opacity: 0.9;
     cursor: pointer;
 }
-ul li, ul li a, ul li:visited{ 
+ul li, ul li a, ul li:visited{
     float: left;
-	position: relative;
-	color: white;
+    position: relative;
+    color: white;
     display: block;
     text-align: center;
     text-decoration: none;
-    width: 120px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 ul li ul{
     display: none;
-    margin-left: -55px;
+    width: 0px;
+    margin-left: -50px;
 }
 ul li ul li{
     width: 230px;
     height: 30px;
     line-height: 30px;
+    width: 90px;
     background: rgb(30, 118, 207);
 }
 ul li:hover ul{

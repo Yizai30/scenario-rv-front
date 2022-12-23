@@ -1,4 +1,4 @@
-// .content{
+// .content-component{
 //     position: absolute;
 //     top: 68px;
 //     left: 0.3%;
@@ -58,7 +58,7 @@
     color: white;
     margin-bottom: 8px;
     display: flex;
-    display: -webkit-flex; 
+    display: -webkit-flex;
 }
 .dropDown{
     height: 30px;
@@ -294,7 +294,7 @@
   #timeline p {
     margin: 0 0 10px;
   }
-  
+
   .date {
     margin-top: -10px;
     top: 50%;
@@ -303,7 +303,7 @@
     line-height: 20px;
     position: absolute;
   }
-  
+
   .circle {
     margin-top: -10px;
     top: 50%;
@@ -316,7 +316,7 @@
     display: block;
     position: absolute;
   }
-  
+
   .timeline-content {
     max-height: 20px;
     padding: 40px 20px 0;
@@ -355,7 +355,7 @@
     hyphens: auto;
     overflow: hidden;
   }
-  
+
   label {
     font-size: 1.3em;
     position: absolute;
@@ -364,11 +364,11 @@
     top: 10px;
     transition: transform 0.2s linear;
   }
-  
+
   .radio {
     display: none;
   }
-  
+
   .radio:checked + .relative label {
     cursor: auto;
     transform: translateX(42px);
@@ -594,7 +594,7 @@
 }
 @media only screen and (max-width: 400px) {
     /*===== // Resonsive Vertical Timeline =====*/
-    
+
     .timeline-article p {
         margin: 0;
     }
@@ -655,5 +655,5 @@
     left: 0;
     right: 0;
     bottom: 0;
-    margin: auto; 
+    margin: auto;
 }

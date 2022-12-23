@@ -1,0 +1,34 @@
+<app-topbar-exclude (openEventExclude)="getProjects($event)"></app-topbar-exclude>
+<app-content-exclude></app-content-exclude>
+<router-outlet></router-outlet>
+
+<!---遮挡层-->
+<div id="popLayer-exclude"></div>
+
+<!-- open -->
+<div id="OpenProject-exclude" class="OpenProject">
+  <div class="table">
+    <span class="label">OpenProject:</span>
+    <button class="closeBox" (click)="close('OpenProject-exclude')">X</button>
+  </div>
+  <div class="showPro">
+    <form id="op">
+      <ul *ngFor="let pro of projects">
+        <li [class.selected]="currentProject===pro" (click)="search(pro)">
+          {{pro}}
+          <ul *ngIf="currentProject === pro">
+            <li *ngFor="let version of versions">
+              <label>
+                <input type="radio" name="project" id="version" value="{{version}}">{{version}}
+              </label>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </form>
+  </div>
+  <div class="openBtn" style="position: absolute; bottom: 10px;">
+    <button class="button" (click)="open()">Open</button>
+    <button class="button" (click)="close('OpenProject-exclude')">Cancel</button>
+  </div>
+</div>

@@ -1,0 +1,107 @@
+<div class="content" id="content-exclude">
+  <div class="top-content">
+    <ul id="composedCCSL-exclude" class="dropDown" *ngIf="composedCcslSet && composedCcslSet.id != null"
+        (click)="change(composedCcslSet.id)">合并的 CCSL 和 时钟图
+    </ul>
+    <ul id="simplifiedCCSL-exclude" class="dropDown" *ngIf="simplifiedCCSLSet && simplifiedCCSLSet.id != null"
+        (click)="change(simplifiedCCSLSet.id)">简化后的 CCSL 和 时钟图
+    </ul>
+    <ul id="orchestratedCCSL-exclude" class="dropDown" *ngIf="orchestrateCCSLSet && orchestrateCCSLSet.id != null"
+        (click)="change(orchestrateCCSLSet.id)">编排互斥不一致场景后的 CCSL 和 时钟图
+    </ul>
+    <ul id="inconsistentLocateCCSL-exclude" class="dropDown" *ngIf="inconsistentLocateCCSLSet && inconsistentLocateCCSLSet.id != null"
+        (click)="change(inconsistentLocateCCSLSet.id)">不一致性定位结果
+    </ul>
+  </div>
+  <div class="middle-content">
+    <div class="ccsl-content" id="ccsl-content-exclude">
+      <!-- CCSL constraints of sequence diagram 1 ... -->
+      <!-- Composed CCSL constraints -->
+      <!-- CCSL constraints of scenario 1 -->
+      <h3 id="ccslText-exclude">CCSL 约束:</h3>
+      <div id="{{composedCcslSet.id}}-P-exclude" *ngIf="composedCcslSet && composedCcslSet.id != null"
+           style="display: none;">
+        <p *ngFor="let ccsl of composedCcslSet.ccslList">{{ccsl}}</p>
+      </div>
+      <div id="{{simplifiedCCSLSet.id}}-P-exclude" *ngIf="simplifiedCCSLSet && simplifiedCCSLSet.id != null"
+           style="display: none;">
+        <p *ngFor="let ccsl of simplifiedCCSLSet.ccslList">{{ccsl}}</p>
+      </div>
+      <div id="{{orchestrateCCSLSet.id}}-P-exclude" *ngIf="orchestrateCCSLSet && orchestrateCCSLSet.id != null"
+           style="display: none;">
+        <p *ngFor="let ccsl of orchestrateCCSLSet.ccslList">{{ccsl}}</p>
+      </div>
+      <div id="{{inconsistentLocateCCSLSet.id}}-P-exclude" *ngIf="inconsistentLocateCCSLSet && inconsistentLocateCCSLSet.id != null"
+           style="display: none;">
+        <p *ngFor="let ccsl of inconsistentLocateCCSLSet.ccslList">{{ccsl}}</p>
+      </div>
+    </div>
+    <div class="cgs-content" id="cgs-content-exclude">
+      <h3 id="cgsText-exclude">时钟图:</h3>
+      <!-- <ul id="CG" *ngIf="CGs">
+          <li id="{{CG}}" *ngFor="let CG of CGs" (click)="changePng(CG)">{{CG}}</li>
+      </ul> -->
+      <!-- 添加 Clock graph 1 ... -->
+      <div style="display: none;" *ngIf="CCG" id="ComposedCG-P-exclude">
+        <img id="ComposedCG-Pag-exclude" (mousewheel)="resizeimg(CCG,$event)">
+      </div>
+      <div style="display: none;" *ngIf="SCG" id="SimplifiedCG-P-exclude">
+        <img id="SimplifiedCG-Pag-exclude" (mousewheel)="resizeimg(SCG,$event)">
+      </div>
+      <div style="display: none;" *ngIf="OCG" id="OrchestratedCG-P-exclude">
+        <img id="OrchestratedCG-Pag-exclude" (mousewheel)="resizeimg(OCG,$event)">
+      </div>
+      <div style="display: none;" *ngIf="LCG" id="InconsistentLocateCG-P-exclude">
+        <img id="InconsistentLocateCG-Pag-exclude" (mousewheel)="resizeimg(LCG,$event)">
+      </div>
+    </div>
+    <section id="conference-timeline" style="display: none;">
+      <div id="conference-center-line"></div>
+      <div class="conference-timeline-content" *ngIf="visualizedScenario && visualizedScenario.timeEvents.length > 0">
+        <div class="timeline-start">Start</div>
+        <div class="close" id="timeline-close" (click)="close('conference-timeline')">X</div>
+        <div class="timeline-scenario left">Scenario 1</div>
+        <div class="timeline-scenario right">Scenario 2</div>
+        <!-- Article -->
+        <div class="timeline-article" *ngFor="let timeEvent of visualizedScenario.timeEvents">
+          <div class="content-left" *ngIf="timeEvent.events[0] != ''">
+            <p>{{timeEvent.events[0]}}
+            </p>
+          </div>
+          <div class="content-right" *ngIf="timeEvent.events[1] != ''">
+            <p>{{timeEvent.events[1]}}
+            </p>
+          </div>
+          <div class="meta-date">
+            <span class="date">{{timeEvent.time}}</span>
+          </div>
+        </div>
+        <div class="timeline-end">End</div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div id="help-exclude" style="display: none;">
+  <h1>案例</h1>
+  <div>
+    <h2>LightController</h2>
+    <p>
+      <a (click)="downloadproject('Env/LightController')">下载案例</a>
+      <br>
+      <a (click)="play('LightController_Env')">演示视频</a>
+    </p>
+
+    <h2>TrafficController</h2>
+    <p>
+      <a (click)="downloadproject('Env/TrafficController')">下载案例</a>
+      <br>
+      <a (click)="play('TrafficController_Env')">演示视频</a>
+    </p>
+  </div>
+</div>
+
+<div id="play-exclude" style="display: none;">
+  <div class="close" id="play-close" (click)="close('play')">X</div>
+  <video width="1120" height="540" controls="controls" id="video1-exclude" preload="auto" src="?"></video>
+</div>

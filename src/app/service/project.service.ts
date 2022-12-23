@@ -13,10 +13,6 @@ import { VisualizedScenario } from '../entity/VisualizedScenario';
 })
 export class ProjectService {
 
-  project: Project;
-  projectName: string;
-  version: string;
-
   constructor(
     private http: HttpClient,
     private fileService: FileService,
@@ -24,18 +20,22 @@ export class ProjectService {
     this.project = new Project();
   }
 
+  project: Project;
+  projectName: string;
+  version: string;
+
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
-  
+
+  private emitChangeProject = new Subject<any>();
+	changeProjectEmitted$ = this.emitChangeProject.asObservable();
+
   initProject(title) {
     console.log(title);
     this.project.title = title;
     this.sendProject(this.project);
   }
-
-  private emitChangeProject = new Subject<any>();
-	changeProjectEmitted$ = this.emitChangeProject.asObservable();
 	sendProject(change: Project) {
 		this.emitChangeProject.next(change);
 	}
@@ -43,70 +43,77 @@ export class ProjectService {
   getProject(projectName: string, version): void {
     // var that = this;
     this.projectName = projectName;
-    if (version == undefined)
-      version = "undefined";
+    if (version === undefined) {
+      version = 'undefined';
+    }
     this.version = version;
     this.fileService.getProject(projectName, version).subscribe(
       project => {
         console.log(project);
         this.sendProject(project);
-        if(project){
-          alert("Open successfully!");
+        if (project){
+          alert('打开成功！');
         } else{
-          alert("Open failed!");
+          alert('打开失败！');
         }
-      })
+      });
   }
 
   sdToCCSL(project: Project): Observable<CCSLSet[]> {
-    let username = this.getUserName()
-    const url = `http://47.52.116.116:8071/project/sdToCCSL?username=${username}`;
-    var ccsls = this.http.post<CCSLSet[]>(url, project, this.httpOptions);
+    const username = this.getUserName();
+    const url = `http://localhost:8071/project/sdToCCSL?username=${username}`;
+    const ccsls = this.http.post<CCSLSet[]>(url, project, this.httpOptions);
     return ccsls;
   }
 
   CCSLComposition(project: Project): Observable<CCSLSet> {
-    let username = this.getUserName()
-    const url = `http://47.52.116.116:8071/project/CCSLComposition?username=${username}`;
-    var ccsl = this.http.post<CCSLSet>(url, project, this.httpOptions);
+    const username = this.getUserName();
+    const url = `http://localhost:8071/project/CCSLComposition?username=${username}`;
+    const ccsl = this.http.post<CCSLSet>(url, project, this.httpOptions);
     return ccsl;
   }
 
   CCSLSimplify(project: Project): Observable<CCSLSet> {
-    let username = this.getUserName()
-    const url = `http://47.52.116.116:8071/project/CCSLSimplify?username=${username}`;
-    var ccsl = this.http.post<CCSLSet>(url, project, this.httpOptions);
+    const username = this.getUserName();
+    const url = `http://localhost:8071/project/CCSLSimplify?username=${username}`;
+    const ccsl = this.http.post<CCSLSet>(url, project, this.httpOptions);
     return ccsl;
   }
 
   CCSLOrchestrate(project: Project): Observable<CCSLSet> {
-    let username = this.getUserName()
-    const url = `http://47.52.116.116:8071/project/CCSLOrchestrate?username=${username}`;
-    var ccsl = this.http.post<CCSLSet>(url, project, this.httpOptions);
+    const username = this.getUserName();
+    const url = `http://localhost:8071/project/CCSLOrchestrate?username=${username}`;
+    const ccsl = this.http.post<CCSLSet>(url, project, this.httpOptions);
+    return ccsl;
+  }
+
+  LocateInconsistency(project: Project): Observable<CCSLSet> {
+    const url = `http://localhost:8071/project/InconsistentLocate`;
+    const ccsl = this.http.post<CCSLSet>(url, project, this.httpOptions);
     return ccsl;
   }
 
   visualizeScenario(project: Project): Observable<VisualizedScenario> {
-    let username = this.getUserName()
-    const url = `http://47.52.116.116:8071/project/visualizeScenario?username=${username}`;
-    var visualizedScenario = this.http.post<VisualizedScenario>(url, project, this.httpOptions);
+    const username = this.getUserName();
+    const url = `http://localhost:8071/project/visualizeScenario?username=${username}`;
+    const visualizedScenario = this.http.post<VisualizedScenario>(url, project, this.httpOptions);
     return visualizedScenario;
   }
 
   getUserName() {
-    let username = ""
-    if (document.cookie != null && document.cookie != "") {
+    let username = '';
+    if (document.cookie != null && document.cookie != '') {
       // username = JSON.parse(document.cookie)['username'];
-      if(document.cookie.indexOf("{") != -1 && document.cookie.indexOf("}") != -1){
-        let start = document.cookie.indexOf("{");
-        let end = document.cookie.indexOf("}");
-        let cookie = document.cookie.slice(start, end + 1);
+      if (document.cookie.indexOf('{') != -1 && document.cookie.indexOf('}') != -1){
+        const start = document.cookie.indexOf('{');
+        const end = document.cookie.indexOf('}');
+        const cookie = document.cookie.slice(start, end + 1);
         // console.log(cookie);
-        username = jQuery.parseJSON(cookie)['username'];
+        username = jQuery.parseJSON(cookie).username;
         // console.log(username)
       }
-      
+
     }
-    return username ? username : "test"
+    return username ? username : 'test';
   }
 }

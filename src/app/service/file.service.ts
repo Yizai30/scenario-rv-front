@@ -34,24 +34,24 @@ export class FileService {
   sendVersion(version) {
     this.sendVersionEmit.next(version);
   }
-  
+
   searchVersion(project: string): Observable<string[]> {
     let username = this.getUserName()
-    const url = `http://47.52.116.116:8071/file/searchVersion/${project}?username=${username}`;
+    const url = `http://localhost:8071/file/searchVersion/${project}?username=${username}`;
     return this.http.get<string[]>(url);
   }
 
   searchProject(): Observable<string[]> {
     let username = this.getUserName()
     console.log(username)
-    const url = `http://47.52.116.116:8071/file/searchProject?username=${username}`;
+    const url = `http://localhost:8071/file/searchProject?username=${username}`;
     return this.http.get<string[]>(url);
   }
 
   setProject(projectName: string): Observable<any> {
     let username = this.getUserName()
     this.projectName = projectName;
-    const url = `http://47.52.116.116:8071/file/setProject/${projectName}?username=${username}`;
+    const url = `http://localhost:8071/file/setProject/${projectName}?username=${username}`;
     var res = this.http.post<any>(url, this.httpOptions);
     // console.log(url);
     return res;
@@ -60,7 +60,7 @@ export class FileService {
   //上传文件
   uploadFile(uploader: FileUploader) {
     let username = this.getUserName()
-    let url = `http://47.52.116.116:8071/file/upload/${this.projectName}?username=${username}`
+    let url = `http://localhost:8071/file/upload/${this.projectName}?username=${username}`
     uploader.setOptions({ url: url });
     uploader.uploadAll();
     console.log(url);
@@ -68,23 +68,23 @@ export class FileService {
 
   getScenarioDiagrams(): Observable<Project> {
     let username = this.getUserName()
-    const url = `http://47.52.116.116:8071/file/getScenarioDiagrams/?username=${username}`;
+    const url = `http://localhost:8071/file/getScenarioDiagrams/?username=${username}`;
     // console.log(url)
     return this.http.get<Project>(url);
   }
 
   getOntology(fileName: string): Observable<Ontology> {
     let username = this.getUserName()
-    const url = `http://47.52.116.116:8071/file/getOntology/${fileName}/?username=${username}`;
+    const url = `http://localhost:8071/file/getOntology/${fileName}/?username=${username}`;
     // console.log(url)
     return this.http.get<Ontology>(url);
   }
-  
+
   //保存项目
   saveProject(projectName: string, project: Project): Observable<boolean> {
     let username = this.getUserName()
     // console.log(project)
-    const url = `http://47.52.116.116:8071/file/saveProject/${projectName}?username=${username}`;
+    const url = `http://localhost:8071/file/saveProject/${projectName}?username=${username}`;
     // console.log(url)
     var res = this.http.post<boolean>(url, project, this.httpOptions);
     return res;
@@ -93,12 +93,12 @@ export class FileService {
   //读取项目信息
   getProject(projectName: string, ver): Observable<Project> {
     let username = this.getUserName()
-    const url = `http://47.52.116.116:8071/file/getProject/${projectName}/${ver}?username=${username}`;
+    const url = `http://localhost:8071/file/getProject/${projectName}/${ver}?username=${username}`;
     console.log(url)
     let res = this.http.get<Project>(url);
     return res;
   }
-  
+
   getUserName() {
     let username = ""
     if (document.cookie != null && document.cookie != "") {

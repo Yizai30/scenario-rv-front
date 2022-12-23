@@ -1,26 +1,25 @@
-<div class="content" id="content">
+<div class="content" id="content-component">
     <div class="top-content">
         <ul id="CCSL" class="dropDown" *ngIf="ccslSetList && ccslSetList.length > 0"
-            (mouseenter)="setHeight(ccslSetList)" (mouseleave)="resetHeight(ccslSetList)">CCSL
+            (mouseenter)="setHeight(ccslSetList)" (mouseleave)="resetHeight(ccslSetList)">转换得到的 CCSL 和 时钟图
             <li id="{{ccslSet.id}}" *ngFor="let ccslSet of ccslSetList" (click)="change(ccslSet.id)">{{ccslSet.id}}</li>
         </ul>
         <ul id="composedCCSL" class="dropDown" *ngIf="composedCcslSet && composedCcslSet.id != null"
-            (click)="change(composedCcslSet.id)">Composed
-            CCSL
+            (click)="change(composedCcslSet.id)">合并的 CCSL 和 时钟图
         </ul>
-        <ul id="simplifiedCCSL" class="dropDown" *ngIf="simplifiedCCSLSet && simplifiedCCSLSet.id != null"
-            (click)="change(simplifiedCCSLSet.id)">SimplifiedCCSL
-        </ul>
-        <ul id="orchestratedCCSL" class="dropDown" *ngIf="orchestrateCCSLSet && orchestrateCCSLSet.id != null"
-            (click)="change(orchestrateCCSLSet.id)">OrchestratedCCSL
-        </ul>
+<!--        <ul id="simplifiedCCSL" class="dropDown" *ngIf="simplifiedCCSLSet && simplifiedCCSLSet.id != null"-->
+<!--            (click)="change(simplifiedCCSLSet.id)">简化的 CCSL-->
+<!--        </ul>-->
+<!--        <ul id="orchestratedCCSL" class="dropDown" *ngIf="orchestrateCCSLSet && orchestrateCCSLSet.id != null"-->
+<!--            (click)="change(orchestrateCCSLSet.id)">编排后的 CCSL-->
+<!--        </ul>-->
     </div>
     <div class="middle-content">
         <div class="ccsl-content" id="ccsl-content">
             <!-- CCSL constraints of sequence diagram 1 ... -->
             <!-- Composed CCSL constraints -->
             <!-- CCSL constraints of scenario 1 -->
-            <h3 id="ccslText">CCSL Constraints:</h3>
+            <h3 id="ccslText">CCSL 约束:</h3>
             <div id="{{ccslset.id}}-P" *ngFor="let ccslset of ccslSetList" style="display: none;">
                 <p *ngFor="let ccsl of ccslset.ccslList">{{ccsl}}</p>
             </div>
@@ -28,19 +27,19 @@
                 style="display: none;">
                 <p *ngFor="let ccsl of composedCcslSet.ccslList">{{ccsl}}</p>
             </div>
-            <div id="{{simplifiedCCSLSet.id}}-P" *ngIf="simplifiedCCSLSet && simplifiedCCSLSet.id != null"
-                style="display: none;">
-                <p *ngFor="let ccsl of simplifiedCCSLSet.ccslList">{{ccsl}}</p>
-            </div>
-            <div id="{{orchestrateCCSLSet.id}}-P" *ngIf="orchestrateCCSLSet && orchestrateCCSLSet.id != null"
-                style="display: none;">
-                <p *ngFor="let ccsl of orchestrateCCSLSet.ccslList">{{ccsl}}</p>
-            </div>
+<!--            <div id="{{simplifiedCCSLSet.id}}-P" *ngIf="simplifiedCCSLSet && simplifiedCCSLSet.id != null"-->
+<!--                style="display: none;">-->
+<!--                <p *ngFor="let ccsl of simplifiedCCSLSet.ccslList">{{ccsl}}</p>-->
+<!--            </div>-->
+<!--            <div id="{{orchestrateCCSLSet.id}}-P" *ngIf="orchestrateCCSLSet && orchestrateCCSLSet.id != null"-->
+<!--                style="display: none;">-->
+<!--                <p *ngFor="let ccsl of orchestrateCCSLSet.ccslList">{{ccsl}}</p>-->
+<!--            </div>-->
         </div>
         <!-- <button id="toGraphBtn">
             Transform to clock graph</button> -->
         <div class="cgs-content" id="cgs-content">
-            <h3 id="cgsText">Clock Graph:</h3>
+            <h3 id="cgsText">时钟图:</h3>
             <!-- <ul id="CG" *ngIf="CGs">
                 <li id="{{CG}}" *ngFor="let CG of CGs" (click)="changePng(CG)">{{CG}}</li>
             </ul> -->
@@ -51,12 +50,12 @@
             <div style="display: none;" *ngIf="CCG" id="ComposedCG-P">
                 <img id="ComposedCG-Pag" (mousewheel)="resizeimg(CCG,$event)">
             </div>
-            <div style="display: none;" *ngIf="SCG" id="SimplifiedCG-P">
-                <img id="SimplifiedCG-Pag" (mousewheel)="resizeimg(SCG,$event)">
-            </div>
-            <div style="display: none;" *ngIf="OCG" id="OrchestratedCG-P">
-                <img id="OrchestratedCG-Pag" (mousewheel)="resizeimg(OCG,$event)">
-            </div>
+<!--            <div style="display: none;" *ngIf="SCG" id="SimplifiedCG-P">-->
+<!--                <img id="SimplifiedCG-Pag" (mousewheel)="resizeimg(SCG,$event)">-->
+<!--            </div>-->
+<!--            <div style="display: none;" *ngIf="OCG" id="OrchestratedCG-P">-->
+<!--                <img id="OrchestratedCG-Pag" (mousewheel)="resizeimg(OCG,$event)">-->
+<!--            </div>-->
         </div>
         <section id="conference-timeline" style="display: none;">
             <div id="conference-center-line"></div>
@@ -86,12 +85,39 @@
     <div class="btnList">
         <ul>
             <!-- <li><button id="uploadBtn" (click)="uploadFile()">Upload xml file of scenario diagrams</button></li> -->
-            <li><button id="uploadBtn" (click)="uploadFile()">Upload</button></li>
-            <li><button id="transformBtn" (click)="sdToCCSL()">Transform to CCSL constraints</button></li>
-            <li><button id="compositionBtn" (click)="CCSLComposition()">Compose</button></li>
-            <li><button id="simplifyBtn" (click)="CCSLSimplify()">Simplify</button></li>
-            <li><button id="orchestrateBtn" (click)="CCSLOrchestrate()">Orchestrate</button></li>
-            <li><button id="visualizeBtn" (click)="visualize()">Visualize</button></li>
+<!--            <li><button id="uploadBtn" (click)="uploadFile()">Upload</button></li>-->
+<!--            <li><button id="transformBtn" (click)="sdToCCSL()">转换为 CCSL 约束</button></li>-->
+<!--            <li><button id="compositionBtn" (click)="CCSLComposition()">合并时钟图</button></li>-->
+<!--            <li><button id="simplifyBtn" (click)="CCSLSimplify()">简化时钟图</button></li>-->
+<!--            <li><button id="orchestrateBtn" (click)="CCSLOrchestrate()">编排不一致场景</button></li>-->
+<!--            <li (mouseleave)="onMouseLeave()">-->
+<!--              <button (mouseenter)="onMouseEnter()">编排不一致场景</button>-->
+<!--              <div-->
+<!--                id="orchestrateList"-->
+<!--                style="visibility: hidden;-->
+<!--                        /*overflow: hidden;*/-->
+<!--                        position: absolute;-->
+<!--                        top: -70px;-->
+<!--                        left: 536px;-->
+<!--                        /*height: 80px;*/-->
+<!--                        text-align: center;-->
+<!--                        background-color: #DFDFE4;-->
+<!--                      "-->
+<!--                >-->
+<!--                <ul>-->
+<!--                  <li id="orchestrateBtn" (click)="CCSLOrchestrate()">-->
+<!--                    互斥不一致-->
+<!--                  </li><br/>-->
+<!--                  <li (click)="uploadFile()">-->
+<!--                    通用不一致-->
+<!--                  </li><br/>-->
+<!--                  <li (click)="uploadFile()">-->
+<!--                    循环不一致-->
+<!--                  </li><br/>-->
+<!--                </ul>-->
+<!--              </div>-->
+<!--            </li>-->
+<!--            <li><button id="visualizeBtn" (click)="visualize()">可视化不一致场景</button></li>-->
             <!-- <li class="check">
                 <button id="verificationBtn">Check</button>
                 <ul>
@@ -101,27 +127,27 @@
             </li> -->
         </ul>
     </div>
-    <!-- <div class="result">
-        <h3>Result:</h3>
-        <p>inconsistent</p>
-    </div> -->
+<!--    <div class="result">-->
+<!--        <h3>Result:</h3>-->
+<!--        <p>inconsistent</p>-->
+<!--    </div>-->
 </div>
 
 <div id="help" style="display: none;">
-    <h1>Examples</h1>
+    <h1>案例</h1>
     <div>
       <h2>LightController</h2>
       <p>
-        <a (click)="downloadproject('Env/LightController')">download project</a>
+        <a (click)="downloadproject('Env/LightController')">下载案例</a>
         <br>
-        <a (click)="play('LightController_Env')">play demo</a>
+        <a (click)="play('LightController_Env')">演示视频</a>
       </p>
 
       <h2>TrafficController</h2>
       <p>
-        <a (click)="downloadproject('Env/TrafficController')">download project</a>
+        <a (click)="downloadproject('Env/TrafficController')">下载案例</a>
         <br>
-        <a (click)="play('TrafficController_Env')">play demo</a>
+        <a (click)="play('TrafficController_Env')">演示视频</a>
       </p>
     </div>
 </div>

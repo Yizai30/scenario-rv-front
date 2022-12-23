@@ -1,0 +1,32 @@
+<div>
+    <img src="assets/icons/logo.png">
+    <nav style="text-align:center">
+        <ul>
+            <li (click)="toHomePage()">返回主界面</li>
+            <li>项目
+                <ul>
+                  <li (click)="newFile()">新建</li>
+                  <li (click)="openProject()">打开</li>
+                </ul>
+            </li>
+            <li>上传
+                <ul>
+                    <li (click)="uploadOntology()">本体图</li>
+                    <li (click)="uploadFile()">情景图</li>
+                  </ul>
+            </li>
+            <li (click)="sdToCCSL()">情景图转换为 CCSL</li>
+            <li (click)="CCSLComposition()">合并环境本体和情景图</li>
+            <li (click)="saveProject()">保存</li>
+            <li (click)="help()">帮助</li>
+        </ul>
+    </nav>
+    <form>
+        <input type="file" multiple accept="text/xml, application/xml" ng2FileSelect [uploader]="uploader" name="xmlFile"
+            id="xmlFile" class="openfile" (change)="selectedFileOnChanged($event)" />
+    </form>
+    <form>
+        <input type="file" ng2FileSelect [uploader]="uploader" name="owlFile" id="ontologyFile" class="openfile"
+            (change)="selectedOWLOnChanged($event)" />
+    </form>
+</div>

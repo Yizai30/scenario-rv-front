@@ -1,0 +1,18 @@
+.home-button {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-button button {
+  background-color: #fff;
+  border-color: #000;
+  font-size: medium;
+  height: 60px;
+  margin: 0 10px 0 10px;
+}
+
+.home-button button:hover {
+  cursor: pointer;
+}
