@@ -68,6 +68,17 @@ export class AppComponentComponent implements OnInit {
             // console.log("New project.")
             // this.projectService.register(description, "undefined");
             this.projectService.initProject(description);
+
+            this.fileService.setProject(this.projectName).subscribe(
+              res => {
+                // console.log(res);
+                if (res === true) {
+                  alert('新建成功！');
+                } else {
+                  alert('该项目已存在！');
+                }
+              }
+            );
             this.closePopEdit();
           }
         }

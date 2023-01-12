@@ -67,7 +67,7 @@ export class TopbarCirculateComponent implements OnInit {
       return;
     }
     this.projectName = this.project.title;
-    this.fileService.saveProject(this.projectName, this.project).subscribe(
+    this.fileService.saveProject(this.project).subscribe(
       res => {
         result = res;
         if (!result) {
@@ -91,6 +91,25 @@ export class TopbarCirculateComponent implements OnInit {
     );
   }
 
+  getCirculateConsistent(): void {
+    console.log(this.project);
+    if (!this.project) {
+      alert('请先新建或打开一个项目！');
+    } else {
+      this.projectService.getCirculateConsistent(this.project).subscribe(
+        circulateConsistentResList => {
+          console.log(circulateConsistentResList);
+          this.project.circulateConsistentResList = circulateConsistentResList;
+          this.project.causalityCGName = this.project.title + '-CCG';
+          this.projectService.sendProject(this.project);
+          console.log(this.project);
+          setTimeout(() => {
+            this.change('CausalityCG');
+          }, 0);
+        });
+    }
+  }
+
   // todo 循环不一致性定位
   LocateInconsistency(): void {
     console.log(this.project);
@@ -102,7 +121,7 @@ export class TopbarCirculateComponent implements OnInit {
       this.projectService.LocateInconsistency(this.project).subscribe(
         ccslSet => {
           console.log(ccslSet);
-          this.project.circularInconsistentLocateCcslSet = ccslSet;
+          // this.project.circularInconsistentLocateCcslSet = ccslSet;
           this.projectService.sendProject(this.project);
           setTimeout(() => {
             this.change(this.circularInconsistentLocateCCSLSet.id);
@@ -134,7 +153,7 @@ export class TopbarCirculateComponent implements OnInit {
       document.getElementById('ComposedCCSL-P-circulate').style.display = 'none';
       document.getElementById('ComposedCG-P-circulate').style.display = 'none';
     }
-    if (this.project.causalityCcslSet != null && this.project.causalityCcslSet.id != null) {
+    if (this.project.causalityCGName != null) {
       document.getElementById('CausalityCG-P-circulate').style.display = 'none';
     }
     if (this.project.circularDependencyCcslSet != null && this.project.circularDependencyCcslSet.id != null) {
@@ -152,7 +171,13 @@ export class TopbarCirculateComponent implements OnInit {
     const userName = this.projectService.getUserName();
 
     if (title.endsWith('CG')) {
-      const url = `http://localhost:8071/project/display?userName=${userName}&projectName=${this.projectName}&version=${this.version}&fileName=${title}&time=${time}`;
+      let CGFileName = '';
+      if (title.startsWith('CausalityCG')) {
+        CGFileName = this.projectName + '-CCG';
+      } else if (title.startsWith('ComposedCG')) {
+        CGFileName = 'ComposedCG';
+      }
+      const url = `http://localhost:8071/project/display?userName=${userName}&projectName=${this.projectName}&version=${this.version}&fileName=${CGFileName}&time=${time}`;
       console.log(url);
       const ID = title + '-Pag-circulate';
       console.log(ID);

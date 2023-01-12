@@ -605,7 +605,7 @@ label {
     display: none;
   }
 }
-#help{
+#help-smt{
   position: absolute;
   top: 68px;
   left: 10%;
@@ -614,7 +614,7 @@ label {
   padding: 0.5em 10px;
 }
 
-#help h1 {
+#help-smt h1 {
   color: rgb(117,144,174);
   background-color: transparent;
   font-family: "trebuchet ms", verdana, helvetica, arial, sans-serif;
@@ -623,7 +623,7 @@ label {
   padding: 1.5ex 0 0 0;
 }
 
-#help h2 {
+#help-smt h2 {
   color: rgb(61,92,122);
   background-color: transparent;
   font-family: "trebuchet ms", verdana, helvetica, arial, sans-serif;
@@ -633,24 +633,24 @@ label {
   padding: 1ex 0 0 0;
 }
 
-#help div{
+#help-smt div{
   text-align: justify;
   margin: -0.5ex 1em 0.5em 2.5em;
   padding: 0.5em 10px;
   clear: left;
 }
 
-#help a {
+#help-smt a {
   cursor: pointer;
   text-decoration: underline;
 }
-#help p {
+#help-smt p {
   line-height: 1.75em;
   margin: 1em 0 1.5em 0;
   padding: 0;
 }
 
-#play{
+#play-smt{
   width: 1120px;
   height: 540px;
   position: absolute;
@@ -659,4 +659,34 @@ label {
   right: 0;
   bottom: 0;
   margin: auto;
+}
+
+.tab {
+  position: relative;
+  //margin:0% 0% 0% 0.2%;
+  /* width: 20%; */
+  height: 4%;
+  padding: 0 8px 0 8px;
+  text-align:center;
+  list-style-type:none;
+  float:left;
+  display: block;
+
+  /* line-height: 20px; */
+  list-style-type:none;
+  cursor: pointer;
+  color: white;
+  background: #B0C4DE	;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  //z-index: 1;
+  font-size: 12px;
+}
+.tab ul li:hover{
+  opacity: 0.5;
+  display: block;
+}
+.tab ul li:focus{
+  background-color:#778899;
 }

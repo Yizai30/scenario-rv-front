@@ -4,6 +4,7 @@ import {CCSLSet} from '../entity/CCSLSet';
 import {VisualizedScenario} from '../entity/VisualizedScenario';
 import {FileService} from '../service/file.service';
 import {ProjectService} from '../service/project.service';
+import {CirculateConsistentRes} from '../entity/CirculateConsistentRes';
 
 @Component({
   selector: 'app-content-circulate',
@@ -17,11 +18,12 @@ export class ContentCirculateComponent implements OnInit {
 
   version;
   composedCcslSet: CCSLSet;
-  causalityCCSLSet: CCSLSet;
+  causalityCGName: string;
   circularDependencyCCSLSet: CCSLSet;
   circularInconsistentLocateCCSLSet: CCSLSet;
   composedCcslFlag = false;
-  causalityCcslFlag = false;
+  causalityCGFlag = false;
+  circulateConsistentResList: CirculateConsistentRes[];
   CCG: string[] = [];
   CACG: string[] = [];
   visualizedScenario: VisualizedScenario;
@@ -46,14 +48,19 @@ export class ContentCirculateComponent implements OnInit {
           }
         }
 
-        if (this.project.causalityCcslSet != null) {
-          // console.log('hahaha-circulate');
-          this.causalityCCSLSet = this.project.causalityCcslSet;
-          this.causalityCcslFlag = true;
+        if (this.project.causalityCGName != null) {
+          console.log('causalityCGName' + this.project.causalityCGName);
+          this.causalityCGName = this.project.causalityCGName;
+          this.causalityCGFlag = true;
           // tslint:disable-next-line:triple-equals
           if (this.CACG.length != 1) {
             this.CACG.push('CausalityCG');
           }
+        }
+
+        if (this.project.circulateConsistentResList != null) {
+          this.circulateConsistentResList = this.project.circulateConsistentResList;
+          console.log('this.circulateConsistentResList: ' + this.project.circulateConsistentResList);
         }
       });
     fileService.sendVersionEmmited$.subscribe(
@@ -89,7 +96,7 @@ export class ContentCirculateComponent implements OnInit {
       document.getElementById('ComposedCCSL-P-circulate').style.display = 'none';
       document.getElementById('ComposedCG-P-circulate').style.display = 'none';
     }
-    if (this.project.causalityCcslSet != null && this.project.causalityCcslSet.id != null) {
+    if (this.project.causalityCGName != null) {
       document.getElementById('CausalityCG-P-circulate').style.display = 'none';
     }
     if (this.project.circularDependencyCcslSet != null && this.project.circularDependencyCcslSet.id != null) {
@@ -100,7 +107,6 @@ export class ContentCirculateComponent implements OnInit {
     }
 
     // console.log(document.getElementById(title + "-P"))
-    console.log('title: ' + title);
     document.getElementById(title + '-P-circulate').style.display = 'block';
     // document.getElementById(cgTitle + '-P-circulate').style.display = 'block';
 
@@ -108,7 +114,13 @@ export class ContentCirculateComponent implements OnInit {
     const userName = this.projectService.getUserName();
 
     if (title.endsWith('CG')) {
-      const url = `http://localhost:8071/project/display?userName=${userName}&projectName=${this.projectName}&version=${this.version}&fileName=${title}&time=${time}`;
+      let CGFileName = '';
+      if (title.startsWith('CausalityCG')) {
+        CGFileName = this.projectName + '-CCG';
+      } else if (title.startsWith('ComposedCG')) {
+        CGFileName = 'ComposedCG';
+      }
+      const url = `http://localhost:8071/project/display?userName=${userName}&projectName=${this.projectName}&version=${this.version}&fileName=${CGFileName}&time=${time}`;
       console.log(url);
       const ID = title + '-Pag-circulate';
       console.log(ID);

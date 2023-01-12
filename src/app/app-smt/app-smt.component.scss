@@ -12,6 +12,24 @@
   opacity: .80;
   filter: alpha(opacity=80); /* 只支持IE6、7、8、9 */
 }
+.SMTCheck {
+  position: fixed;
+  border-radius: 5px;
+  background-color: white;
+  padding: 10px;
+  top: 50%;
+  width: 260px;
+  height: 260px;
+  border: 1px solid #ccc;
+  display: none;
+
+  left: 0;
+  transform: translateY(-50%);
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  z-index: 11;
+}
 .projectTitle{
   margin: 5px;
 }
@@ -99,4 +117,23 @@ ul {
 .selected {
   background-color: #CFD8DC;
   color: white;
+}
+.close {
+  width: 60%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: right;
+}
+.nameLabel {
+  width: 110px;
+  padding: 5px 0 5px 0;
+  margin: 5px 0 5px 0;
+}
+.textInput {
+  position: absolute;
+  /* margin:10px 5px 15px 10px; */
+  width: 100px;
+  /* right: 30px; */
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }

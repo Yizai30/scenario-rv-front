@@ -19,6 +19,13 @@ export class AppSmtComponent implements OnInit {
   interval;
   versions: string[];
 
+  // smt check params
+  timeout = 0;
+  bound = 0;
+  period = false;
+  pv = 0;
+  deadlock = false;
+
   constructor(
     private fileService: FileService,
     private projectService: ProjectService,
@@ -92,6 +99,43 @@ export class AppSmtComponent implements OnInit {
     // console.log(id)
     document.getElementById(id).style.display = 'none';
     document.getElementById('popLayer-smt').style.display = 'none';
+  }
+
+  // setSMTInformation
+  setSMTInfo(): void {
+    const TimeOut = $('input[id=\'TimeOut\']').val();
+    const Bound = $('input[id=\'Bound\']').val();
+    const Period = $('input[id=\'Period\']').eq(0).is(':checked');
+    const PeriodValue = $('input[id=\'PeriodValue\']').val();
+    const Deadlock = $('input[id=\'Deadlock\']').eq(0).is(':checked');
+    console.log(TimeOut);
+    console.log(Bound);
+    console.log(Period);
+    console.log(PeriodValue);
+    console.log(Deadlock);
+    this.close('SMTCheck');
+    // let userName = '';
+    // if (document.cookie !== ''){
+    //   console.log(document.cookie);
+    //   // userName = jQuery.parseJSON(document.cookie)['username']
+    //   const userInfo = document.cookie.slice(document.cookie.indexOf('{'), document.cookie.indexOf('}') + 1);
+    //   // userName = JSON.parse(userInfo)['username'];
+    //   // userName = getCookie('username');
+    // }
+    // if (userName === '') {
+    //   userName = 'test';
+    // }
+    console.time('smt-time');
+    this.projectService.smtCheck(this.project, Number(TimeOut), Number(Bound), Period, Number(PeriodValue), Deadlock).subscribe( results => {
+      this.project.smtRes = results;
+      console.log(results);
+      document.getElementById('smtResName').style.display = 'block';
+      document.getElementById('smt-locate-result').style.display = 'none';
+      document.getElementById('cgsText-smt').innerText = '验证结果：';
+      document.getElementById('smtResName').innerText = results.name;
+      document.getElementById('smt-res-result').innerText = results.res;
+      console.timeEnd('smt-time');
+    });
   }
 
   ngOnInit(): void {

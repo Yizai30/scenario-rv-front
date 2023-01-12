@@ -119,7 +119,6 @@ export class ContentComponent implements OnInit {
     const cgTitle = title.replace('CCSL', 'CG');
     console.log(cgTitle);
 
-
     for (let i = 0; i <= tabs.length; i++) {
       // tslint:disable-next-line:triple-equals
       if (tabs[i] != undefined) {
@@ -134,33 +133,23 @@ export class ContentComponent implements OnInit {
           const cgId = id.replace('CCSL', 'CG');
           console.log('cgId: ' + cgId);
           document.getElementById(cgId + '-P').style.display = 'none';
-          console.log('this.project.composedCcslSet: ' + this.project.composedCcslSet);
-          console.log('this.project.composedCcslSet.id: ' + this.project.composedCcslSet.id);
+          // console.log('this.project.composedCcslSet: ' + this.project.composedCcslSet);
+          // console.log('this.project.composedCcslSet.id: ' + this.project.composedCcslSet.id);
           if (this.project.composedCcslSet != null && this.project.composedCcslSet.id != null) {
-            // console.log('hahaha');
             document.getElementById('ComposedCCSL-P').style.display = 'none';
             document.getElementById('ComposedCG-P').style.display = 'none';
           }
-          // if (this.project.simplifiedCcslSet != null && this.project.simplifiedCcslSet.id != null) {
-          //   document.getElementById('SimplifiedCCSL-P').style.display = 'none';
-          //   document.getElementById('SimplifiedCG-P').style.display = 'none';
-          // }
-          // if (this.project.orchestrateCcslSet != null && this.project.orchestrateCcslSet.id != null) {
-          //   document.getElementById('OrchestratedCCSL-P').style.display = 'none';
-          //   document.getElementById('OrchestratedCG-P').style.display = 'none';
-          // }
         }
       }
     }
 
-    // console.log(document.getElementById(title + "-P"))
     document.getElementById(title + '-P').style.display = 'block';
     document.getElementById(cgTitle + '-P').style.display = 'block';
 
     const time = (new Date()).getTime();
     const userName = this.projectService.getUserName();
 
-    const url = `http://localhost:8071/project/display?userName=${userName}&projectName=${this.projectName}&version=${this.version}&fileName=${cgTitle}&time=${time}`;
+    const url = `http://localhost:8071/project/display?projectName=${this.projectName}&fileName=${cgTitle}`;
     console.log(url);
     const ID = cgTitle + '-Pag';
     console.log(ID);

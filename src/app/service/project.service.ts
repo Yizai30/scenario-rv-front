@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs';
@@ -7,6 +7,10 @@ import { Project } from '../entity/Project';
 import * as jQuery from 'jquery';
 import { FileService } from './file.service';
 import { VisualizedScenario } from '../entity/VisualizedScenario';
+import {CirculateConsistentRes} from '../entity/CirculateConsistentRes';
+import {SMTRes} from '../entity/SMTRes';
+import {SMTCheckRequest} from '../entity/SMTCheckRequest';
+import {SMTCheckRes} from '../entity/SMTCheckRes';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +32,7 @@ export class ProjectService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
+  private SMTEmit = new Subject<any>();
   private emitChangeProject = new Subject<any>();
 	changeProjectEmitted$ = this.emitChangeProject.asObservable();
 
@@ -49,53 +54,78 @@ export class ProjectService {
     this.version = version;
     this.fileService.getProject(projectName, version).subscribe(
       project => {
-        console.log(project);
+        console.log('getProject:' + project);
         this.sendProject(project);
         if (project){
           alert('打开成功！');
         } else{
           alert('打开失败！');
         }
+        if (project.smtRes) {
+          document.getElementById('smtResName').innerText = project.smtRes.name;
+          document.getElementById('smt-res-result').innerText = project.smtRes.res;
+          document.getElementById('smtResName').style.display = 'block';
+        }
       });
   }
 
   sdToCCSL(project: Project): Observable<CCSLSet[]> {
-    const username = this.getUserName();
-    const url = `http://localhost:8071/project/sdToCCSL?username=${username}`;
+    const url = `http://localhost:8071/project/sdToCCSL`;
     const ccsls = this.http.post<CCSLSet[]>(url, project, this.httpOptions);
     return ccsls;
   }
 
   CCSLComposition(project: Project): Observable<CCSLSet> {
     const username = this.getUserName();
-    const url = `http://localhost:8071/project/CCSLComposition?username=${username}`;
+    const url = `http://localhost:8071/project/CCSLComposition`;
     const ccsl = this.http.post<CCSLSet>(url, project, this.httpOptions);
     return ccsl;
   }
 
   CCSLSimplify(project: Project): Observable<CCSLSet> {
-    const username = this.getUserName();
-    const url = `http://localhost:8071/project/CCSLSimplify?username=${username}`;
+    const url = `http://localhost:8071/project/CCSLSimplify`;
     const ccsl = this.http.post<CCSLSet>(url, project, this.httpOptions);
     return ccsl;
   }
 
   CCSLOrchestrate(project: Project): Observable<CCSLSet> {
-    const username = this.getUserName();
-    const url = `http://localhost:8071/project/CCSLOrchestrate?username=${username}`;
+    const url = `http://localhost:8071/project/CCSLOrchestrate`;
     const ccsl = this.http.post<CCSLSet>(url, project, this.httpOptions);
     return ccsl;
   }
 
-  LocateInconsistency(project: Project): Observable<CCSLSet> {
+  LocateInconsistency(project: Project): Observable<string[]> {
     const url = `http://localhost:8071/project/InconsistentLocate`;
-    const ccsl = this.http.post<CCSLSet>(url, project, this.httpOptions);
-    return ccsl;
+    const sdPngNameList = this.http.post<string[]>(url, project, this.httpOptions);
+    return sdPngNameList;
+  }
+
+  getCirculateConsistent(project: Project): Observable<CirculateConsistentRes[]> {
+    const url = `http://localhost:8071/check/getConsistent`;
+    const circulateConsistentResList = this.http.post<CirculateConsistentRes[]>(url, project, this.httpOptions);
+    return circulateConsistentResList;
+  }
+
+  smtCheck(project: Project, timeout: number, bound: number, period: boolean, pv: number, deadlock: boolean): Observable<SMTRes> {
+    const url = `http://localhost:8071/check/smt`;
+    const sMTCheckRequest = new SMTCheckRequest(project, timeout, bound, period, pv, deadlock);
+    // console.log(url);
+    const res = this.http.post<SMTRes>(url, sMTCheckRequest, this.httpOptions);
+    return res;
+  }
+
+  minUnsat(project: Project): Observable<SMTCheckRes> {
+    const url = `http://localhost:8071/check/minUnsat`;
+    const smtCheckRes = this.http.post<SMTCheckRes>(url, project, this.httpOptions);
+    return smtCheckRes;
+  }
+
+  setSMTRes(SMTRes: SMTRes[]) {
+    this.SMTEmit.next(SMTRes);
   }
 
   visualizeScenario(project: Project): Observable<VisualizedScenario> {
-    const username = this.getUserName();
-    const url = `http://localhost:8071/project/visualizeScenario?username=${username}`;
+    const url = `http://localhost:8071/project/visualizeScenario`;
     const visualizedScenario = this.http.post<VisualizedScenario>(url, project, this.httpOptions);
     return visualizedScenario;
   }

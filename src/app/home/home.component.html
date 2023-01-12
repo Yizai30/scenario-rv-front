@@ -1,6 +1,11 @@
 <div class="home-button">
   <button (click)="toAppComponent()">需求形式化</button>
-  <button (click)="toAppExclude()">互斥一致性验证</button>
-  <button (click)="toAppCirculate()">循环一致性验证</button>
-  <button (click)="toAppSmt()">基于SMT的一致性验证</button>
+  <div class="dropdown">
+    <button (click)="showDropdownContent()">需求验证 ∨</button>
+    <div id="dropdown-content" class="dropdown-content">
+      <a (click)="toAppExclude()">互斥一致性验证</a>
+      <a (click)="toAppCirculate()">循环一致性验证</a>
+      <a (click)="toAppSmt()">基于SMT的一致性验证</a>
+    </div>
+  </div>
 </div>

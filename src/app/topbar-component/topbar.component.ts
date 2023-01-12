@@ -27,6 +27,11 @@ export class TopbarComponent implements OnInit {
   projects: string[];
   composedCcslSet: CCSLSet;
   version;
+  ccslSetList: CCSLSet[];
+  ccslFlag = false;
+  composedCcslFlag = false;
+  CGs: string[] = [];
+  CCG: string[] = [];
 
   uploader: FileUploader = new FileUploader({
     method: 'POST',
@@ -58,7 +63,30 @@ export class TopbarComponent implements OnInit {
     projectService.changeProjectEmitted$.subscribe(
       project => {
         this.project = project;
+        console.log(this.project);
         this.projectName = project.title;
+        if (this.project.ccslSetList != null) {
+          this.ccslSetList = this.project.ccslSetList;
+          this.ccslFlag = true;
+          // tslint:disable-next-line:triple-equals
+          if (this.CGs.length != this.ccslSetList.length) {
+            for (let i = 0; i < this.ccslSetList.length; i++) {
+              this.CGs.push('CG-' + (i + 1));
+            }
+          }
+          setTimeout(() => {
+            this.change(this.ccslSetList[0].id);
+          }, 0);
+        }
+        if (this.project.composedCcslSet != null) {
+          // console.log('hahaha');
+          this.composedCcslSet = this.project.composedCcslSet;
+          this.composedCcslFlag = true;
+          // tslint:disable-next-line:triple-equals
+          if (this.CCG.length != 1) {
+            this.CCG.push('ComposedCG');
+          }
+        }
       });
   }
 
@@ -102,41 +130,37 @@ export class TopbarComponent implements OnInit {
       this.fileService.setProject(this.projectName).subscribe(
         res => {
           // console.log(res);
-          if (res === true) {
-            // console.log(this.uploader)
-            const that = this;
-            that.fileService.uploadFile(that.uploader);
+          // console.log(this.uploader)
+          const that = this;
+          that.fileService.uploadFile(that.uploader);
+          // tslint:disable-next-line:only-arrow-functions
+          that.uploader.onCompleteAll = function(): void {
+            // tslint:disable-next-line:no-console
+            console.info('onCompleteAll');
             // tslint:disable-next-line:only-arrow-functions
-            that.uploader.onCompleteAll = function(): void {
-              // tslint:disable-next-line:no-console
-              console.info('onCompleteAll');
-              // tslint:disable-next-line:only-arrow-functions
-              that.interval = setInterval(function(): void {
-                clearInterval(that.interval);
-                // 解析xml文件得到情景图对象
-                that.fileService.getScenarioDiagrams().subscribe(
-                  project => {
-                    // console.log(project);
-                    that.project.contextDiagram = project.contextDiagram;
-                    that.project.problemDiagram = project.problemDiagram;
-                    that.project.scenarioGraphList = project.scenarioGraphList;
-                    that.scenarioDiagramsFlag = true;
-                    alert('情景图上传成功！');
-                    console.log(that.project);
-                    // // 将情景图转换为CCSL约束
-                    // that.projectService.sdToCCSL(that.project).subscribe(
-                    //   ccsls => {
-                    //     // console.log(ccsls);
-                    //     that.project.ccslSetList = ccsls;
-                    //     console.log(that.project)
-                    //     that.projectService.sendProject(that.project);
-                    //   })
-                  });
-              }, 1500);
-            };
-          } else {
-            alert('该项目已存在！');
-          }
+            that.interval = setInterval(function(): void {
+              clearInterval(that.interval);
+              // 解析xml文件得到情景图对象
+              that.fileService.getScenarioDiagrams(that.projectName).subscribe(
+                project => {
+                  // console.log(project);
+                  that.project.contextDiagram = project.contextDiagram;
+                  that.project.problemDiagram = project.problemDiagram;
+                  that.project.scenarioGraphList = project.scenarioGraphList;
+                  that.scenarioDiagramsFlag = true;
+                  alert('情景图上传成功！');
+                  console.log(that.project);
+                  // // 将情景图转换为CCSL约束
+                  // that.projectService.sdToCCSL(that.project).subscribe(
+                  //   ccsls => {
+                  //     // console.log(ccsls);
+                  //     that.project.ccslSetList = ccsls;
+                  //     console.log(that.project)
+                  //     that.projectService.sendProject(that.project);
+                  //   })
+                });
+            }, 1500);
+          };
         }
       );
     }
@@ -186,7 +210,7 @@ export class TopbarComponent implements OnInit {
               that.interval = setInterval(function(): void {
                 clearInterval(that.interval);
                 // 解析owl文件得到环境本体对象
-                that.fileService.getOntology(that.ontologyName).subscribe(
+                that.fileService.getOntology(that.ontologyName, that.projectName).subscribe(
                   ontology => {
                     // console.log(ontology);
                     that.project.ontology = ontology;
@@ -215,7 +239,7 @@ export class TopbarComponent implements OnInit {
       return;
     }
     this.projectName = this.project.title;
-    this.fileService.saveProject(this.projectName, this.project).subscribe(
+    this.fileService.saveProject(this.project).subscribe(
       res => {
         result = res;
         if (!result) {
@@ -251,6 +275,10 @@ export class TopbarComponent implements OnInit {
           this.project.ccslSetList = ccsls;
           // console.log(this.project)
           this.projectService.sendProject(this.project);
+          console.log(this.project.ccslSetList[0].id);
+          setTimeout(() => {
+            this.change(this.project.ccslSetList[0].id);
+          }, 300);
         });
     }
   }
@@ -262,6 +290,8 @@ export class TopbarComponent implements OnInit {
     } else if (this.project.ccslSetList == null) {
       alert('请先将顺序图转换为 CCSL 约束!');
     } else {
+      console.log(this.projectName);
+      this.project.title = this.projectName;
       this.projectService.CCSLComposition(this.project).subscribe(
         ccslConstraints => {
           console.log(ccslConstraints);
@@ -269,7 +299,7 @@ export class TopbarComponent implements OnInit {
           this.projectService.sendProject(this.project);
           setTimeout(() => {
             this.change(this.composedCcslSet.id);
-          }, 0);
+          }, 300);
         });
     }
   }
@@ -284,7 +314,7 @@ export class TopbarComponent implements OnInit {
     } else if (title.startsWith('Orchestrated')){
       parTab = document.getElementById('orchestratedCCSL').parentElement;
     } else {
-      parTab = document.getElementById(title).parentElement.parentElement;
+      parTab = document.getElementById(title).parentElement;
     }
     console.log(parTab);
     const tabs = parTab.children;
@@ -329,7 +359,7 @@ export class TopbarComponent implements OnInit {
     const time = (new Date()).getTime();
     const userName = this.projectService.getUserName();
 
-    const url = `http://localhost:8071/project/display?userName=${userName}&projectName=${this.projectName}&version=${this.version}&fileName=${cgTitle}&time=${time}`;
+    const url = `http://localhost:8071/project/display?projectName=${this.projectName}&fileName=${cgTitle}`;
     console.log(url);
     const ID = cgTitle + '-Pag';
     console.log(ID);

@@ -9,15 +9,12 @@
     <ul id="orchestratedCCSL-exclude" class="dropDown" *ngIf="orchestrateCCSLSet && orchestrateCCSLSet.id != null"
         (click)="change(orchestrateCCSLSet.id)">编排互斥不一致场景后的 CCSL 和 时钟图
     </ul>
-    <ul id="inconsistentLocateCCSL-exclude" class="dropDown" *ngIf="inconsistentLocateCCSLSet && inconsistentLocateCCSLSet.id != null"
-        (click)="change(inconsistentLocateCCSLSet.id)">不一致性定位结果
+    <ul id="inconsistentLocateSDPngs-exclude" class="dropDown" *ngIf="inconsistentLocateSDPngs.length != 0"
+        (click)="change('InconsistentLocateSDPngs')">互斥不一致性定位结果
     </ul>
   </div>
   <div class="middle-content">
     <div class="ccsl-content" id="ccsl-content-exclude">
-      <!-- CCSL constraints of sequence diagram 1 ... -->
-      <!-- Composed CCSL constraints -->
-      <!-- CCSL constraints of scenario 1 -->
       <h3 id="ccslText-exclude">CCSL 约束:</h3>
       <div id="{{composedCcslSet.id}}-P-exclude" *ngIf="composedCcslSet && composedCcslSet.id != null"
            style="display: none;">
@@ -31,17 +28,9 @@
            style="display: none;">
         <p *ngFor="let ccsl of orchestrateCCSLSet.ccslList">{{ccsl}}</p>
       </div>
-      <div id="{{inconsistentLocateCCSLSet.id}}-P-exclude" *ngIf="inconsistentLocateCCSLSet && inconsistentLocateCCSLSet.id != null"
-           style="display: none;">
-        <p *ngFor="let ccsl of inconsistentLocateCCSLSet.ccslList">{{ccsl}}</p>
-      </div>
     </div>
     <div class="cgs-content" id="cgs-content-exclude">
       <h3 id="cgsText-exclude">时钟图:</h3>
-      <!-- <ul id="CG" *ngIf="CGs">
-          <li id="{{CG}}" *ngFor="let CG of CGs" (click)="changePng(CG)">{{CG}}</li>
-      </ul> -->
-      <!-- 添加 Clock graph 1 ... -->
       <div style="display: none;" *ngIf="CCG" id="ComposedCG-P-exclude">
         <img id="ComposedCG-Pag-exclude" (mousewheel)="resizeimg(CCG,$event)">
       </div>
@@ -51,8 +40,8 @@
       <div style="display: none;" *ngIf="OCG" id="OrchestratedCG-P-exclude">
         <img id="OrchestratedCG-Pag-exclude" (mousewheel)="resizeimg(OCG,$event)">
       </div>
-      <div style="display: none;" *ngIf="LCG" id="InconsistentLocateCG-P-exclude">
-        <img id="InconsistentLocateCG-Pag-exclude" (mousewheel)="resizeimg(LCG,$event)">
+      <div style="display: none;" *ngIf="LSD" id="InconsistentLocateSD-P-exclude">
+        <img id="InconsistentLocateSD-Pag-exclude" (mousewheel)="resizeimg(LSD,$event)">
       </div>
     </div>
     <section id="conference-timeline" style="display: none;">

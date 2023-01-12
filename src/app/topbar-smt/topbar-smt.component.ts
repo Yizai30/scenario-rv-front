@@ -1,9 +1,16 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Project} from '../entity/Project';
 import {CCSLSet} from '../entity/CCSLSet';
 import {FileService} from '../service/file.service';
 import {ProjectService} from '../service/project.service';
 import {Router} from '@angular/router';
+import {AppSmtComponent} from '../app-smt/app-smt.component';
+import {SMTCheckRes} from '../entity/SMTCheckRes';
+
+let askResultUrl = '';
+let timeCnt = 0;
+let intervalClock: any;
 
 @Component({
   selector: 'app-topbar-smt',
@@ -17,12 +24,14 @@ export class TopbarSmtComponent implements OnInit {
   project: Project;
   projectName: string;
   projects: string[];
-  causalityCCSLSet: CCSLSet;
-  circularDependencyCCSLSet: CCSLSet;
-  circularInconsistentLocateCCSLSet: CCSLSet;
+  smtCheck = false;
+  isLocalize = false;
+  localizeReady = false;
+  localizeCanClick = false;
   version;
 
   constructor(
+    private http: HttpClient,
     private fileService: FileService,
     private projectService: ProjectService,
     private router: Router
@@ -50,6 +59,10 @@ export class TopbarSmtComponent implements OnInit {
       });
   }
 
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
+
   ngOnInit(): void {
   }
 
@@ -67,7 +80,7 @@ export class TopbarSmtComponent implements OnInit {
       return;
     }
     this.projectName = this.project.title;
-    this.fileService.saveProject(this.projectName, this.project).subscribe(
+    this.fileService.saveProject(this.project).subscribe(
       res => {
         result = res;
         if (!result) {
@@ -91,23 +104,103 @@ export class TopbarSmtComponent implements OnInit {
     );
   }
 
-  // todo 循环不一致性定位
-  LocateInconsistency(): void {
-    console.log(this.project);
+  smtCheckBox(): void {
     if (!this.project) {
       alert('请先新建或打开一个项目！');
-    } else if (this.project.causalityCcslSet == null) {
+    } else if (!this.project.composedCcslSet) {
+      return;
+    } else {
+      document.getElementById('popLayer-smt').style.display = 'block';
+      document.getElementById('SMTCheck').style.display = 'block';
+    }
+    this.smtCheck = true;
+    this.localizeReady = this.project.composedCcslSet && this.smtCheck;
+    this.localizeCanClick = this.localizeReady && !this.isLocalize;
+  }
+
+  askRes(): void {
+    const xhr = new XMLHttpRequest();
+    xhr.timeout = 0; // 超时时间，单位是毫秒
+    xhr.open('GET', askResultUrl, true);
+    xhr.send();
+    xhr.onload = e => {
+      // 请求完成。在此进行处理。
+      console.log('xhr.status:', xhr.status);
+      console.log('Http.responseText:', xhr.responseText);
+      const tmpSmtCheckRes = JSON.parse(xhr.responseText);
+      console.log('---> tmpSmtCheckRes: ' + tmpSmtCheckRes);
+      timeCnt += 1;
+      if (timeCnt * 10 > 1800) {
+        // timeCnt记录等待周期数，每个等待周期10s，若等待时间大于1800秒（30分钟）则告知用户等运行完毕后查看结果文件
+        // this.fileService.version = 'This will cost more than 30 minutes, please check after completion';
+        // this.safenlService.setConsistent(consistents);
+        clearInterval(intervalClock);
+        console.log('因超时而清除了定时器', intervalClock);
+      }
+    };
+  }
+
+  minUnsat_smt(): void{
+    if (!this.project) {
+      alert('请先新建或打开一个项目！');
+    } else if (this.project.smtRes == null) {
       alert('请先完成验证！');
     } else {
-      this.projectService.LocateInconsistency(this.project).subscribe(
-        ccslSet => {
-          console.log(ccslSet);
-          this.project.circularInconsistentLocateCcslSet = ccslSet;
+      alert('定位需要很长时间，请耐心等待');
+      this.projectService.minUnsat(this.project).subscribe(
+        smtCheckRes => {
+          console.log(smtCheckRes);
+          this.project.smtCheckRes = smtCheckRes;
           this.projectService.sendProject(this.project);
-          setTimeout(() => {
-            this.change(this.circularInconsistentLocateCCSLSet.id);
-          }, 0);
+          alert('定位完成！');
+          setTimeout(() => {}, 0);
         });
+    }
+    askResultUrl = `http://localhost:8071/check/getMinUnsatResult?projectName=${this.projectName}`;
+    timeCnt = 0;
+    intervalClock = setInterval(this.askRes.bind(this), 10000);
+    this.isLocalize = true;
+    this.localizeCanClick = this.localizeReady && !this.isLocalize;
+  }
+
+  lookCheckResult(): void {
+    if (!this.project) {
+      alert('请先新建或打开一个项目！');
+    } else if (this.project.smtRes == null) {
+      alert('请先完成验证！');
+    } else {
+      document.getElementById('cgsText-smt').innerText = '验证结果：';
+      document.getElementById('smtResName').style.display = 'block';
+      document.getElementById('smt-res-result').style.display = 'block';
+      document.getElementById('smt-locate-result').style.display = 'none';
+    }
+  }
+
+  lookLocalizeResult(): void {
+    if (!this.project) {
+      alert('请先新建或打开一个项目！');
+    } else if (this.project.smtRes == null) {
+      alert('请先完成验证！');
+    } else if (this.project.smtCheckRes == null) {
+      alert('请先完成定位！');
+    } else {
+      document.getElementById('cgsText-smt').innerText = '定位结果：';
+      document.getElementById('smtResName').style.display = 'none';
+      document.getElementById('smt-res-result').style.display = 'none';
+      document.getElementById('smt-locate-result').style.display = 'block';
+      if (this.project.smtCheckRes.res.length === 0) {
+        document.getElementById('smt-locate-result').innerHTML = `
+        <div>
+          未发现不一致
+        </div>
+      `;
+      } else {
+        document.getElementById('smt-locate-result').innerHTML = `
+        <div>
+          ${this.project.smtCheckRes.res}
+        </div>
+      `;
+      }
     }
   }
 

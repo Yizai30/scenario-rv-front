@@ -6,11 +6,8 @@
     <ul id="clockGraph-circulate" class="dropDown" *ngIf="composedCcslSet && composedCcslSet.id != null"
         (click)="change('ComposedCG')">时钟图
     </ul>
-    <ul id="causalityClockGraph-circulate" class="dropDown" *ngIf="causalityCCSLSet && causalityCCSLSet.id != null"
+    <ul id="causalityClockGraph-circulate" class="dropDown" *ngIf="causalityCGName != null && causalityCGName != ''"
         (click)="change('CausalityCG')">因果时钟图
-    </ul>
-    <ul id="circularDependency-circulate" class="dropDown" *ngIf="circularDependencyCCSLSet && circularDependencyCCSLSet.id != null"
-        (click)="change(circularDependencyCCSLSet.id)">循环依赖
     </ul>
     <ul id="inconsistentLocate-circulate" class="dropDown" *ngIf="circularInconsistentLocateCCSLSet && circularInconsistentLocateCCSLSet.id != null"
         (click)="change(circularInconsistentLocateCCSLSet.id)">不一致性定位结果
@@ -39,9 +36,13 @@
       </div>
     </div>
     <div class="content-right" id="content-right-circulate">
-      <h3 id="cgsText-circulate">编译结果:</h3>
-      <div>
-        这里显示编译结果
+      <h3 id="cgsText-circulate">循环依赖:</h3>
+      <div *ngIf="circulateConsistentResList != null && circulateConsistentResList.length === 0">
+        无
+      </div>
+      <div *ngIf="circulateConsistentResList != null && circulateConsistentResList.length > 0">
+        <!-- todo 生成循环不一致的合并 ccsl，再测试运行以及保存 -->
+        <p *ngFor="let consistentRes of circulateConsistentResList">{{consistentRes.ccslList}}</p>
       </div>
     </div>
     <section id="conference-timeline" style="display: none;">

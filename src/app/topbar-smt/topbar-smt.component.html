@@ -4,16 +4,12 @@
     <ul>
       <li (click)="toHomePage()">返回主界面</li>
       <li (click)="openProject2()">打开</li>
-      <li>验证
-        <ul>
-          <li (click)="openProject2()">Check</li>
-          <li (click)="openProject2()">Localize</li>
-        </ul>
-      </li>
-      <li (click)="LocateInconsistency()">查看定位结果</li>
-      <li (click)="LocateInconsistency()">不一致性定位</li>
+      <li (click)="smtCheckBox()">SMT 验证</li>
+      <li (click)="minUnsat_smt()" [class.disable]="!localizeCanClick">定位</li>
+      <li (click)="lookCheckResult()">查看验证结果</li>
+      <li (click)="lookLocalizeResult()">查看定位结果</li>
       <li (click)="saveProject()">保存</li>
-      <li (click)="help()">帮助</li>
+<!--      <li (click)="help()">帮助</li>-->
     </ul>
   </nav>
 </div>

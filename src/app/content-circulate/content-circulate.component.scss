@@ -605,7 +605,7 @@ label {
     display: none;
   }
 }
-#help{
+#help-circulate{
   position: absolute;
   top: 68px;
   left: 10%;
@@ -614,7 +614,7 @@ label {
   padding: 0.5em 10px;
 }
 
-#help h1 {
+#help-circulate h1 {
   color: rgb(117,144,174);
   background-color: transparent;
   font-family: "trebuchet ms", verdana, helvetica, arial, sans-serif;
@@ -623,7 +623,7 @@ label {
   padding: 1.5ex 0 0 0;
 }
 
-#help h2 {
+#help-circulate h2 {
   color: rgb(61,92,122);
   background-color: transparent;
   font-family: "trebuchet ms", verdana, helvetica, arial, sans-serif;
@@ -633,24 +633,24 @@ label {
   padding: 1ex 0 0 0;
 }
 
-#help div{
+#help-circulate div{
   text-align: justify;
   margin: -0.5ex 1em 0.5em 2.5em;
   padding: 0.5em 10px;
   clear: left;
 }
 
-#help a {
+#help-circulate a {
   cursor: pointer;
   text-decoration: underline;
 }
-#help p {
+#help-circulate p {
   line-height: 1.75em;
   margin: 1em 0 1.5em 0;
   padding: 0;
 }
 
-#play{
+#play-circulate{
   width: 1120px;
   height: 540px;
   position: absolute;

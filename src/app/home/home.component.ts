@@ -28,4 +28,12 @@ export class HomeComponent implements OnInit {
   toAppSmt(): void {
     this.router.navigate(['app-smt']);
   }
+
+  showDropdownContent(): void {
+    if (document.getElementById('dropdown-content').style.display === 'none') {
+      document.getElementById('dropdown-content').style.display = 'block';
+    } else {
+      document.getElementById('dropdown-content').style.display = 'none';
+    }
+  }
 }

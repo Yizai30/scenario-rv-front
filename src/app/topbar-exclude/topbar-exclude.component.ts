@@ -21,7 +21,7 @@ export class TopbarExcludeComponent implements OnInit {
   projects: string[];
   simplifiedCCSLSet: CCSLSet;
   orchestrateCCSLSet: CCSLSet;
-  inconsistentLocateCCSLSet: CCSLSet;
+  inconsistentLocateSDPngs: string[];
   version;
 
   constructor(
@@ -63,14 +63,15 @@ export class TopbarExcludeComponent implements OnInit {
     document.getElementById('help-exclude').style.display = 'none';
     document.getElementById('content-exclude').style.display = 'block';
     let result: boolean;
-    console.log(this.project);
+    // console.log(this.project);
     if (this.project.title == null) {
       alert('该项目为空！');
       return;
     }
     this.projectName = this.project.title;
-    console.log('this.project.inconsistentCcslSet: ' + this.project.inconsistentLocateCcslSet);
-    this.fileService.saveProject(this.projectName, this.project).subscribe(
+    // console.log('this.project.inconsistentCcslSet: ' + this.project.inconsistentLocateCcslSet);
+    console.log(this.project);
+    this.fileService.saveProject(this.project).subscribe(
       res => {
         result = res;
         if (!result) {
@@ -143,12 +144,12 @@ export class TopbarExcludeComponent implements OnInit {
       alert('请先完成互斥不一致场景的编排！');
     } else {
       this.projectService.LocateInconsistency(this.project).subscribe(
-        ccslSet => {
-          console.log(ccslSet);
-          this.project.inconsistentLocateCcslSet = ccslSet;
+        sdPngNameList => {
+          console.log(sdPngNameList);
+          this.project.inconsistentLocateSdPngNameList = sdPngNameList;
           this.projectService.sendProject(this.project);
           setTimeout(() => {
-            this.change(this.inconsistentLocateCCSLSet.id);
+            this.change('InconsistentLocateSDPngs');
           }, 0);
         });
     }
@@ -164,81 +165,77 @@ export class TopbarExcludeComponent implements OnInit {
     } else if (title.startsWith('Orchestrated')){
       parTab = document.getElementById('orchestratedCCSL-exclude').parentElement;
     } else {
-      parTab = document.getElementById('inconsistentLocateCCSL-exclude').parentElement;
+      document.getElementById('inconsistentLocateSDPngs-exclude').style.display = 'block';
     }
-    console.log(parTab);
-    const tabs = parTab.children;
-    console.log(tabs);
     const cgTitle = title.replace('CCSL', 'CG');
     console.log(cgTitle);
 
-
-    for (let i = 0; i <= tabs.length; i++) {
-      // tslint:disable-next-line:triple-equals
-      if (tabs[i] != undefined) {
-        const ctabs = tabs[i].children;
-        // tslint:disable-next-line:prefer-for-of
-        for (let j = 0; j < ctabs.length; j++) {
-          // console.log(ctabs[j]);
-          const id = ctabs[j].getAttribute('id');
-          // console.log(id)
-          document.getElementById(id + '-P-exclude').style.display = 'none';
-          const cgId = id.replace('CCSL', 'CG');
-          // console.log(cgId)
-          document.getElementById(cgId + '-P-exclude').style.display = 'none';
-          if (this.project.composedCcslSet != null && this.project.composedCcslSet.id != null) {
-            document.getElementById('ComposedCCSL-P-exclude').style.display = 'none';
-            document.getElementById('ComposedCG-P-exclude').style.display = 'none';
-          }
-          if (this.project.simplifiedCcslSet != null && this.project.simplifiedCcslSet.id != null) {
-            document.getElementById('SimplifiedCCSL-P-exclude').style.display = 'none';
-            document.getElementById('SimplifiedCG-P-exclude').style.display = 'none';
-          }
-          if (this.project.orchestrateCcslSet != null && this.project.orchestrateCcslSet.id != null) {
-            document.getElementById('OrchestratedCCSL-P-exclude').style.display = 'none';
-            document.getElementById('OrchestratedCG-P-exclude').style.display = 'none';
-          }
-          if (this.project.inconsistentLocateCcslSet != null && this.project.inconsistentLocateCcslSet.id != null) {
-            document.getElementById('InconsistentLocateCCSL-P-exclude').style.display = 'none';
-            document.getElementById('InconsistentLocateCG-P-exclude').style.display = 'none';
-          }
-        }
+    if (this.project.composedCcslSet != null && this.project.composedCcslSet.id != null) {
+      if (!title.startsWith('Inconsistent')) {
+        document.getElementById('ComposedCCSL-P-exclude').style.display = 'none';
       }
+      document.getElementById('ComposedCG-P-exclude').style.display = 'none';
+    }
+    if (this.project.simplifiedCcslSet != null && this.project.simplifiedCcslSet.id != null) {
+      if (!title.startsWith('Inconsistent')) {
+        document.getElementById('SimplifiedCCSL-P-exclude').style.display = 'none';
+      }
+      document.getElementById('SimplifiedCG-P-exclude').style.display = 'none';
+    }
+    if (this.project.orchestrateCcslSet != null && this.project.orchestrateCcslSet.id != null) {
+      if (!title.startsWith('Inconsistent')) {
+        document.getElementById('OrchestratedCCSL-P-exclude').style.display = 'none';
+      }
+      document.getElementById('OrchestratedCG-P-exclude').style.display = 'none';
+    }
+    if (this.project.inconsistentLocateSdPngNameList != null) {
+      document.getElementById('InconsistentLocateSD-P-exclude').style.display = 'none';
     }
 
-    // console.log(document.getElementById(title + "-P"))
-    document.getElementById(title + '-P-exclude').style.display = 'block';
-    document.getElementById(cgTitle + '-P-exclude').style.display = 'block';
+    if (!title.startsWith('Inconsistent')) {
+      document.getElementById(title + '-P-exclude').style.display = 'block';
+      document.getElementById(cgTitle + '-P-exclude').style.display = 'block';
+    } else {
+      document.getElementById('InconsistentLocateSD-P-exclude').style.display = 'block';
+    }
 
     const time = (new Date()).getTime();
     const userName = this.projectService.getUserName();
 
-    const url = `http://localhost:8071/project/display?userName=${userName}&projectName=${this.projectName}&version=${this.version}&fileName=${cgTitle}&time=${time}`;
+    let url = `http://localhost:8071/project/display?userName=${userName}&projectName=${this.projectName}&version=${this.version}&fileName=${cgTitle}&time=${time}`;
     console.log(url);
-    const ID = cgTitle + '-Pag-exclude';
+    let ID = '';
+    if (!title.startsWith('Inconsistent')) {
+      ID = cgTitle + '-Pag-exclude';
+    } else {
+      ID = 'InconsistentLocateSD-Pag-exclude';
+    }
     console.log(ID);
     console.log(document.getElementById(ID));
-    // console.log($(ID));
-    // $(ID).attr("src", url);
-    document.getElementById(ID).setAttribute('src', url);
+    if (!title.startsWith('Inconsistent')) {
+      document.getElementById(ID).setAttribute('src', url);
+    } else {
+      url = `http://localhost:8071/project/display?userName=${userName}&projectName=${this.projectName}&version=${this.version}&fileName=SD&time=${time}`;
+      document.getElementById(ID).setAttribute('src', url);
+    }
 
-    document.getElementById('ccslText-exclude').innerHTML = 'CCSL 约束:';
-    document.getElementById('cgsText-exclude').innerHTML = '时钟图:';
+    if (!title.startsWith('Inconsistent')) {
+      document.getElementById('ccslText-exclude').innerHTML = 'CCSL 约束:';
+      document.getElementById('cgsText-exclude').innerHTML = '时钟图:';
+    }
     const ccslText = document.getElementById('ccslText-exclude').innerHTML;
     let newCcslText = null;
-    if (title.startsWith('CCSL')) {
-      newCcslText = '情景图 ' + title.split('CCSL-')[1] + ' 的 ' + ccslText.slice(0, 16);
-    } else if (title.startsWith('Composed')) {
+    if (title.startsWith('Composed')) {
       newCcslText = '合并后的 ' + ccslText;
     } else if (title.startsWith('Simplified')){
       newCcslText = '简化后的 ' + ccslText;
     } else if (title.startsWith('Orchestrated')){
       newCcslText = '编排后的 ' + ccslText;
-    } else if (title.startsWith('Inconsistent')) {
-      newCcslText = '用于互斥不一致场景编排的 ' + ccslText;
     }
     console.log(newCcslText);
-    document.getElementById('ccslText-exclude').innerHTML = newCcslText;
+    if (!title.startsWith('Inconsistent')) {
+      document.getElementById('ccslText-exclude').innerHTML = newCcslText;
+    }
     const cgsText = document.getElementById('cgsText-exclude').innerHTML;
     let newCgsText = null;
     if (title.startsWith('CCSL')) {
@@ -250,7 +247,7 @@ export class TopbarExcludeComponent implements OnInit {
     } else if (title.startsWith('Orchestrated')){
       newCgsText = '编排后的 ' + cgsText;
     } else if (title.startsWith('Inconsistent')) {
-      newCgsText = '用于不一致场景编排的 CCSL 对应的 时钟图';
+      newCgsText = '互斥不一致场景对应的情景图：';
     }
     console.log(newCgsText);
     document.getElementById('cgsText-exclude').innerHTML = newCgsText;

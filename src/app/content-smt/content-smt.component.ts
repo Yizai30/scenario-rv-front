@@ -4,6 +4,7 @@ import {CCSLSet} from '../entity/CCSLSet';
 import {VisualizedScenario} from '../entity/VisualizedScenario';
 import {FileService} from '../service/file.service';
 import {ProjectService} from '../service/project.service';
+import {SMTRes} from '../entity/SMTRes';
 
 @Component({
   selector: 'app-content-smt',
@@ -50,6 +51,8 @@ export class ContentSMTComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    document.getElementById('smtResName').style.display = 'none';
+    document.getElementById('smt-res-result').style.display = 'none';
   }
 
   change(title: string): void {
@@ -59,12 +62,9 @@ export class ContentSMTComponent implements OnInit {
       parTab = document.getElementById('composedCCSL-smt').parentElement;
     } else if (title.startsWith('ComposedCG')){
       parTab = document.getElementById('clockGraph-smt').parentElement;
-    } else if (title.startsWith('CausalityCG')){
-      parTab = document.getElementById('causalityClockGraph-smt').parentElement;
-    } else if (title.startsWith('CircularDependencyCCSL')){
-      parTab = document.getElementById('circularDependency-smt').parentElement;
-    } else if (title.startsWith('CircularInconsistentLocateCCSL')){
-      parTab = document.getElementById('inconsistentLocate-smt').parentElement;
+    } else if (title.startsWith('SmtRes')) {
+      document.getElementById('smt-res-result').style.display = 'block';
+      // document.getElementById('smt-res-result').innerText = this.project.smtRes.res;
     }
     console.log(parTab);
     const tabs = parTab.children;
@@ -80,10 +80,9 @@ export class ContentSMTComponent implements OnInit {
     document.getElementById(title + '-P-smt').style.display = 'block';
 
     const time = (new Date()).getTime();
-    const userName = this.projectService.getUserName();
 
     if (title.endsWith('CG')) {
-      const url = `http://localhost:8071/project/display?userName=${userName}&projectName=${this.projectName}&version=${this.version}&fileName=${title}&time=${time}`;
+      const url = `http://localhost:8071/project/display?projectName=${this.projectName}&fileName=${title}&time=${time}`;
       console.log(url);
       const ID = title + '-Pag-smt';
       console.log(ID);

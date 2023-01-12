@@ -13,11 +13,11 @@ import { Project } from '../entity/Project';
 })
 export class FileService {
 
-  projectName: string;
-
   constructor(
     private http: HttpClient,
   ) { }
+
+  projectName: string;
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -25,93 +25,87 @@ export class FileService {
 
   private newProEmit = new Subject<any>();
   newProEmmited$ = this.newProEmit.asObservable();
-  newProject(isnew: boolean) {
-    this.newProEmit.next(isnew);
-  }
 
   private sendVersionEmit = new Subject<any>();
   sendVersionEmmited$ = this.sendVersionEmit.asObservable();
+  newProject(isnew: boolean) {
+    this.newProEmit.next(isnew);
+  }
   sendVersion(version) {
     this.sendVersionEmit.next(version);
   }
 
   searchVersion(project: string): Observable<string[]> {
-    let username = this.getUserName()
-    const url = `http://localhost:8071/file/searchVersion/${project}?username=${username}`;
+    const url = `http://localhost:8071/file/searchVersion/${project}`;
     return this.http.get<string[]>(url);
   }
 
   searchProject(): Observable<string[]> {
-    let username = this.getUserName()
-    console.log(username)
+    const username = this.getUserName();
+    console.log(username);
     const url = `http://localhost:8071/file/searchProject?username=${username}`;
     return this.http.get<string[]>(url);
   }
 
   setProject(projectName: string): Observable<any> {
-    let username = this.getUserName()
     this.projectName = projectName;
-    const url = `http://localhost:8071/file/setProject/${projectName}?username=${username}`;
-    var res = this.http.post<any>(url, this.httpOptions);
+    const url = `http://localhost:8071/file/setProject/${projectName}`;
+    const res = this.http.post<any>(url, this.httpOptions);
     // console.log(url);
     return res;
   }
 
-  //上传文件
-  uploadFile(uploader: FileUploader) {
-    let username = this.getUserName()
-    let url = `http://localhost:8071/file/upload/${this.projectName}?username=${username}`
-    uploader.setOptions({ url: url });
+  // 上传文件
+  uploadFile(uploader: FileUploader): void {
+    const url = `http://localhost:8071/file/upload/${this.projectName}`;
+    uploader.setOptions({ url });
     uploader.uploadAll();
     console.log(url);
   }
 
-  getScenarioDiagrams(): Observable<Project> {
-    let username = this.getUserName()
-    const url = `http://localhost:8071/file/getScenarioDiagrams/?username=${username}`;
+  getScenarioDiagrams(projectName: string): Observable<Project> {
+    const url = `http://localhost:8071/file/getScenarioDiagrams/${projectName}`;
     // console.log(url)
     return this.http.get<Project>(url);
   }
 
-  getOntology(fileName: string): Observable<Ontology> {
-    let username = this.getUserName()
-    const url = `http://localhost:8071/file/getOntology/${fileName}/?username=${username}`;
+  getOntology(fileName: string, projectName: string): Observable<Ontology> {
+    const url = `http://localhost:8071/file/getOntology/${projectName}/${fileName}`;
     // console.log(url)
     return this.http.get<Ontology>(url);
   }
 
-  //保存项目
-  saveProject(projectName: string, project: Project): Observable<boolean> {
-    let username = this.getUserName()
+  // 保存项目
+  saveProject(project: Project): Observable<boolean> {
     // console.log(project)
-    const url = `http://localhost:8071/file/saveProject/${projectName}?username=${username}`;
+    const url = `http://localhost:8071/file/saveProject`;
     // console.log(url)
-    var res = this.http.post<boolean>(url, project, this.httpOptions);
+    console.log('saveProject: ' + project);
+    const res = this.http.post<boolean>(url, project, this.httpOptions);
     return res;
   }
 
-  //读取项目信息
+  // 读取项目信息
   getProject(projectName: string, ver): Observable<Project> {
-    let username = this.getUserName()
-    const url = `http://localhost:8071/file/getProject/${projectName}/${ver}?username=${username}`;
-    console.log(url)
-    let res = this.http.get<Project>(url);
+    const url = `http://localhost:8071/file/getProject/${projectName}/${ver}`;
+    console.log(url);
+    const res = this.http.get<Project>(url);
     return res;
   }
 
   getUserName() {
-    let username = ""
-    if (document.cookie != null && document.cookie != "") {
+    let username = '';
+    if (document.cookie != null && document.cookie != '') {
       // username = jQuery.parseJSON(document.cookie)['username'];
-      if(document.cookie.indexOf("{") != -1 && document.cookie.indexOf("}") != -1){
-        let start = document.cookie.indexOf("{");
-        let end = document.cookie.indexOf("}");
-        let cookie = document.cookie.slice(start, end + 1);
+      if (document.cookie.indexOf('{') != -1 && document.cookie.indexOf('}') != -1){
+        const start = document.cookie.indexOf('{');
+        const end = document.cookie.indexOf('}');
+        const cookie = document.cookie.slice(start, end + 1);
         // console.log(cookie);
-        username = jQuery.parseJSON(cookie)['username'];
+        username = jQuery.parseJSON(cookie).username;
         // console.log(username)
       }
     }
-    return username ? username : "test"
+    return username ? username : 'test';
   }
 }

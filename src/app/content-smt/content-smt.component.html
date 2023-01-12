@@ -20,10 +20,11 @@
       </div>
     </div>
     <div class="content-right" id="content-right-smt">
-      <h3 id="cgsText-smt">编译结果:</h3>
-      <div>
-        这里显示编译结果
-      </div>
+      <h3 id="cgsText-smt">验证结果：</h3>
+      <div id="smtResName" class="tab" (click)="change('SmtRes')"></div>
+      <br><br>
+      <div id="smt-res-result" style="position:relative; font-size: medium"></div>
+      <div id="smt-locate-result" style="position:relative; font-size: medium"></div>
     </div>
     <section id="conference-timeline" style="display: none;">
       <div id="conference-center-line"></div>

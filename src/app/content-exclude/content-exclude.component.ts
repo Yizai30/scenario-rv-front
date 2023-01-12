@@ -21,18 +21,18 @@ export class ContentExcludeComponent implements OnInit {
   composedCcslSet: CCSLSet;
   simplifiedCCSLSet: CCSLSet;
   orchestrateCCSLSet: CCSLSet;
-  inconsistentLocateCCSLSet: CCSLSet;
-  ccslFlag = false;
+  inconsistentLocateSDPngs: string[] = [];
   composedCcslFlag = false;
   simplifiedCcslFlag = false;
   orchestratedCcslFlag = false;
-  inconsistentLocateCcslFlag = false;
-  // CGs: string[] = [];
+  inconsistentLocateSdFlag = false;
   CCG: string[] = [];
   SCG: string[] = [];
   OCG: string[] = [];
-  LCG: string[] = [];
+  LSD: string[] = [];
   visualizedScenario: VisualizedScenario;
+  // 情景图列表
+  sdSrcList: string[] = [];
 
   constructor(
     private fileService: FileService,
@@ -43,6 +43,7 @@ export class ContentExcludeComponent implements OnInit {
         this.project = project;
         console.log(this.project);
         this.projectName = project.title;
+        console.log('inconsistentLocateSdPngs' + this.project.inconsistentLocateSdPngNameList);
 
         if (this.project.composedCcslSet != null) {
           console.log('hahaha-exclude');
@@ -69,12 +70,13 @@ export class ContentExcludeComponent implements OnInit {
             this.OCG.push('OrchestratedCG');
           }
         }
-        if (this.project.inconsistentLocateCcslSet != null) {
-          this.inconsistentLocateCCSLSet = this.project.inconsistentLocateCcslSet;
-          this.inconsistentLocateCcslFlag = true;
+        if (this.project.inconsistentLocateSdPngNameList != null) {
+          console.log('inconsistentLocateSdPngs' + this.project.inconsistentLocateSdPngNameList);
+          this.inconsistentLocateSDPngs = this.project.inconsistentLocateSdPngNameList;
+          this.inconsistentLocateSdFlag = true;
           // tslint:disable-next-line:triple-equals
-          if (this.LCG.length != 1) {
-            this.LCG.push('InconsistentLocateCG');
+          if (this.LSD.length != 1) {
+            this.LSD.push('InconsistentLocateSD');
           }
         }
       });
@@ -98,64 +100,83 @@ export class ContentExcludeComponent implements OnInit {
     } else if (title.startsWith('Orchestrated')){
       parTab = document.getElementById('orchestratedCCSL-exclude').parentElement;
     } else {
-      parTab = document.getElementById('inconsistentLocateCCSL-exclude').parentElement;
+      parTab = document.getElementById('inconsistentLocateSDPngs-exclude').parentElement;
+      document.getElementById('inconsistentLocateSDPngs-exclude').style.display = 'block';
     }
     console.log(parTab);
     const tabs = parTab.children;
     console.log(tabs);
     const cgTitle = title.replace('CCSL', 'CG');
     console.log(cgTitle);
+
     if (this.project.composedCcslSet != null && this.project.composedCcslSet.id != null) {
-      document.getElementById('ComposedCCSL-P-exclude').style.display = 'none';
+      if (!title.startsWith('Inconsistent')) {
+        document.getElementById('ComposedCCSL-P-exclude').style.display = 'none';
+      }
       document.getElementById('ComposedCG-P-exclude').style.display = 'none';
     }
     if (this.project.simplifiedCcslSet != null && this.project.simplifiedCcslSet.id != null) {
-      console.log('hahaha');
-      document.getElementById('SimplifiedCCSL-P-exclude').style.display = 'none';
+      if (!title.startsWith('Inconsistent')) {
+        document.getElementById('SimplifiedCCSL-P-exclude').style.display = 'none';
+      }
       document.getElementById('SimplifiedCG-P-exclude').style.display = 'none';
     }
     if (this.project.orchestrateCcslSet != null && this.project.orchestrateCcslSet.id != null) {
-      document.getElementById('OrchestratedCCSL-P-exclude').style.display = 'none';
+      if (!title.startsWith('Inconsistent')) {
+        document.getElementById('OrchestratedCCSL-P-exclude').style.display = 'none';
+      }
       document.getElementById('OrchestratedCG-P-exclude').style.display = 'none';
     }
-    if (this.project.inconsistentLocateCcslSet != null && this.project.inconsistentLocateCcslSet.id != null) {
-      document.getElementById('InconsistentLocateCCSL-P-exclude').style.display = 'none';
-      document.getElementById('InconsistentLocateCG-P-exclude').style.display = 'none';
+    if (this.project.inconsistentLocateSdPngNameList != null) {
+      document.getElementById('InconsistentLocateSD-P-exclude').style.display = 'none';
     }
 
-    // console.log(document.getElementById(title + "-P"))
-    document.getElementById(title + '-P-exclude').style.display = 'block';
-    document.getElementById(cgTitle + '-P-exclude').style.display = 'block';
+    if (!title.startsWith('Inconsistent')) {
+      document.getElementById(title + '-P-exclude').style.display = 'block';
+      document.getElementById(cgTitle + '-P-exclude').style.display = 'block';
+    } else {
+      document.getElementById('InconsistentLocateSD-P-exclude').style.display = 'block';
+    }
 
     const time = (new Date()).getTime();
     const userName = this.projectService.getUserName();
 
-    const url = `http://localhost:8071/project/display?userName=${userName}&projectName=${this.projectName}&version=${this.version}&fileName=${cgTitle}&time=${time}`;
+    let url = `http://localhost:8071/project/display?userName=${userName}&projectName=${this.projectName}&version=${this.version}&fileName=${cgTitle}&time=${time}`;
     console.log(url);
-    const ID = cgTitle + '-Pag-exclude';
+    let ID = '';
+    if (!title.startsWith('Inconsistent')) {
+      ID = cgTitle + '-Pag-exclude';
+    } else {
+      ID = 'InconsistentLocateSD-Pag-exclude';
+    }
     console.log(ID);
     console.log(document.getElementById(ID));
     // console.log($(ID));
     // $(ID).attr("src", url);
-    document.getElementById(ID).setAttribute('src', url);
+    if (!title.startsWith('Inconsistent')) {
+      document.getElementById(ID).setAttribute('src', url);
+    } else {
+      url = `http://localhost:8071/project/display?userName=${userName}&projectName=${this.projectName}&version=${this.version}&fileName=SD&time=${time}`;
+      document.getElementById(ID).setAttribute('src', url);
+    }
 
-    document.getElementById('ccslText-exclude').innerHTML = 'CCSL 约束:';
-    document.getElementById('cgsText-exclude').innerHTML = '时钟图:';
+    if (!title.startsWith('Inconsistent')) {
+      document.getElementById('ccslText-exclude').innerHTML = 'CCSL 约束:';
+      document.getElementById('cgsText-exclude').innerHTML = '时钟图:';
+    }
     const ccslText = document.getElementById('ccslText-exclude').innerHTML;
     let newCcslText = null;
-    if (title.startsWith('CCSL')) {
-      newCcslText = '情景图 ' + title.split('CCSL-')[1] + ' 的 ' + ccslText.slice(0, 16);
-    } else if (title.startsWith('Composed')) {
+    if (title.startsWith('Composed')) {
       newCcslText = '合并后的 ' + ccslText;
     } else if (title.startsWith('Simplified')){
       newCcslText = '简化后的 ' + ccslText;
     } else if (title.startsWith('Orchestrated')){
       newCcslText = '编排后的 ' + ccslText;
-    } else if (title.startsWith('Inconsistent')) {
-      newCcslText = '用于互斥不一致场景编排的 ' + ccslText;
     }
     console.log(newCcslText);
-    document.getElementById('ccslText-exclude').innerHTML = newCcslText;
+    if (!title.startsWith('Inconsistent')) {
+      document.getElementById('ccslText-exclude').innerHTML = newCcslText;
+    }
     const cgsText = document.getElementById('cgsText-exclude').innerHTML;
     let newCgsText = null;
     if (title.startsWith('CCSL')) {
@@ -167,7 +188,7 @@ export class ContentExcludeComponent implements OnInit {
     } else if (title.startsWith('Orchestrated')){
       newCgsText = '编排后的 ' + cgsText;
     } else if (title.startsWith('Inconsistent')) {
-      newCgsText = '用于不一致场景编排的 CCSL 对应的时钟图：';
+      newCgsText = '互斥不一致场景对应的情景图：';
     }
     console.log(newCgsText);
     document.getElementById('cgsText-exclude').innerHTML = newCgsText;
